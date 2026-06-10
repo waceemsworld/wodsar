@@ -2,885 +2,915 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WOD SAR — گلمت واٹر کمیٹی</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WOD SAR — گلمت</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --teal:#1D9E75;--teal-dark:#0F6E56;--teal-light:#E1F5EE;--teal-mid:#9FE1CB;
-    --amber:#EF9F27;--amber-bg:#FAEEDA;--amber-text:#854F0B;
-    --red:#E24B4A;--red-bg:#FCEBEB;--red-text:#A32D2D;
-    --blue-bg:#E6F1FB;--blue-text:#185FA5;
-    --bg:#f8f9fa;--surface:#fff;--border:#e0e0e0;
-    --text:#1a1a1a;--muted:#666;--faint:#999;
-  }
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+/* ── RESET & TOKENS ─────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --teal:#1a9e78;--teal-d:#0e7057;--teal-l:#e0f5ee;--teal-m:#8fd9c0;
+  --water:#2e7fc1;--water-l:#e3f0fb;
+  --amber:#d4880a;--amber-l:#fdf0d8;
+  --red:#c94040;--red-l:#fceaea;
+  --blue:#3060b8;--blue-l:#e8eefb;
+  --bg:#f0f2f5;--card:#fff;--border:#dde2e8;
+  --tx:#1c1f23;--mu:#5a6270;--fa:#9ba3af;
+  --r8:8px;--r12:12px;--r16:16px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+}
+html,body{height:100%;overflow-x:hidden;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;color:var(--tx);font-size:14px;line-height:1.5}
 
-  /* ── TOP BAR ── */
-  .topbar{background:var(--teal);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.15)}
-  .topbar-brand{display:flex;align-items:center;gap:10px}
-  .topbar-brand svg{width:28px;height:28px;fill:none;stroke:#fff;stroke-width:1.8}
-  .topbar-title{color:#fff;font-size:17px;font-weight:600;letter-spacing:-0.3px}
-  .topbar-sub{color:var(--teal-mid);font-size:11px;margin-top:1px;text-align:right;direction:rtl}
-  .topbar-right{text-align:right}
-  .sync-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:6px;padding:5px 10px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background 0.15s}
-  .sync-btn:hover{background:rgba(255,255,255,0.3)}
-  .sync-btn.spinning svg{animation:spin 1s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+/* ── TOP BAR ───────────────────────────────── */
+.bar{background:linear-gradient(135deg,#1a9e78 0%,#0e7057 100%);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.brand{display:flex;align-items:center;gap:11px}
+.logo-wrap{width:34px;height:34px;background:rgba(255,255,255,.18);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.logo{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2}
+.btitle{color:#fff;font-size:18px;font-weight:700;letter-spacing:-.4px}
+.bsub{color:var(--teal-m);font-size:11px;direction:rtl;margin-top:1px}
+.sbtn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:var(--r8);padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;letter-spacing:.01em}
+.sbtn:active{background:rgba(255,255,255,.25)}
+.sbtn.spinning svg{animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stime{color:var(--teal-m);font-size:10px;margin-top:3px;text-align:right}
 
-  /* ── SETUP BANNER ── */
-  .setup-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px 16px;margin:16px;font-size:13px;line-height:1.6}
-  .setup-banner strong{color:#856404}
-  .setup-banner ol{margin:8px 0 0 18px}
-  .setup-banner code{background:#f8d7da;padding:1px 5px;border-radius:3px;font-size:12px;color:#842029}
-  .setup-banner input[type=text]{width:100%;margin-top:8px;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px}
-  .setup-banner .save-btn{margin-top:8px;background:var(--teal);color:#fff;border:none;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:13px}
-  .setup-banner .save-btn:hover{background:var(--teal-dark)}
+/* ── NAV ───────────────────────────────────── */
+.nav{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:60px;z-index:90;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nb{flex:1;min-width:60px;padding:10px 4px 8px;font-size:10px;font-weight:500;border:none;background:none;color:var(--mu);cursor:pointer;border-bottom:2.5px solid transparent;display:flex;flex-direction:column;align-items:center;gap:3px;white-space:nowrap;letter-spacing:.02em}
+.nb svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.9}
+.nb.active{color:var(--teal);border-bottom-color:var(--teal)}
 
-  /* ── NAV ── */
-  .nav{display:flex;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:90}
-  .nav-btn{flex:1;padding:10px 4px 8px;font-size:11px;border:none;background:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:3px}
-  .nav-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8}
-  .nav-btn.active{color:var(--teal);border-bottom-color:var(--teal)}
+/* ── PANELS ─────────────────────────────────── */
+.panel{display:none;padding:14px 14px 40px;max-width:680px;margin:0 auto}
+.panel.active{display:block}
 
-  /* ── PANELS ── */
-  .panel{display:none;padding:16px;max-width:700px;margin:0 auto}
-  .panel.active{display:block}
+/* ── SETUP ──────────────────────────────────── */
+#setup-screen{padding:20px 16px;max-width:520px;margin:0 auto}
+.setup-card{background:var(--card);border-radius:var(--r16);border:1px solid var(--border);padding:24px;box-shadow:var(--shadow)}
+.setup-card h2{font-size:17px;font-weight:700;margin-bottom:8px}
+.setup-card p{font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:16px}
+.setup-card ol{font-size:13px;color:var(--mu);line-height:2.1;margin:0 0 18px 20px}
+.setup-card ol li strong{color:var(--tx)}
+.inp{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--r8);font-size:13px;background:var(--card);color:var(--tx);-webkit-appearance:none}
+.inp:focus{outline:none;border-color:var(--teal)}
+.btn-go{width:100%;padding:13px;background:var(--teal);color:#fff;border:none;border-radius:var(--r8);font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;letter-spacing:.02em}
+.btn-go:active{background:var(--teal-d)}
+.btn-skip{width:100%;padding:11px;background:none;color:var(--mu);border:1.5px solid var(--border);border-radius:var(--r8);font-size:13px;cursor:pointer;margin-top:8px}
 
-  /* ── STAT GRID ── */
-  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-  .stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center}
-  .stat-val{font-size:20px;font-weight:700}
-  .stat-lbl{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3}
-  .stat-lbl .urdu{font-size:10px;display:block}
-  .green{color:var(--teal-dark)}
-  .amber{color:var(--amber-text)}
-  .red{color:var(--red-text)}
+/* ── STATS ──────────────────────────────────── */
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r12);padding:14px 10px 12px;text-align:center;box-shadow:var(--shadow)}
+.sv{font-size:16px;font-weight:700;line-height:1.2}
+.sl{font-size:10px;color:var(--mu);margin-top:4px;line-height:1.4;font-weight:500}
+.gn{color:var(--teal-d)} .am{color:var(--amber)} .rd{color:var(--red)} .bl{color:var(--water)}
 
-  /* ── CARDS ── */
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px}
-  .section-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin:16px 0 8px}
+/* ── CARDS ──────────────────────────────────── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r12);padding:14px 15px;margin-bottom:10px;box-shadow:var(--shadow)}
+.card.tap{cursor:pointer;transition:box-shadow .15s}
+.card.tap:active{box-shadow:0 0 0 2px var(--teal-l)}
+.sec{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.07em;margin:18px 0 10px;display:flex;align-items:center;justify-content:space-between}
+.sec-urdu{direction:rtl;font-size:11px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--fa)}
 
-  /* ── BADGES ── */
-  .badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
-  .badge.paid{background:var(--teal-light);color:var(--teal-dark)}
-  .badge.due{background:var(--amber-bg);color:var(--amber-text)}
-  .badge.overdue{background:var(--red-bg);color:var(--red-text)}
-  .badge.partial{background:var(--blue-bg);color:var(--blue-text)}
-  .badge.open{background:var(--red-bg);color:var(--red-text)}
-  .badge.resolved{background:var(--teal-light);color:var(--teal-dark)}
-  .badge.monitor{background:var(--amber-bg);color:var(--amber-text)}
+/* ── TAB PILLS (water / wod) ────────────────── */
+.tab-pills{display:flex;gap:6px;margin-bottom:14px}
+.pill{flex:1;padding:9px 10px;border-radius:var(--r8);border:1.5px solid var(--border);background:var(--card);font-size:12px;font-weight:600;cursor:pointer;text-align:center;color:var(--mu);transition:all .15s}
+.pill.active{background:var(--teal-l);border-color:var(--teal);color:var(--teal-d)}
+.pill.water-active{background:var(--water-l);border-color:var(--water);color:var(--water)}
 
-  /* ── PROGRESS ── */
-  .progress-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin:7px 0 4px}
-  .progress-fill{height:100%;border-radius:3px;background:var(--teal);transition:width 0.5s}
-  .progress-fill.amber{background:var(--amber)}
+/* ── BADGES ─────────────────────────────────── */
+.badge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700;white-space:nowrap;flex-shrink:0;letter-spacing:.02em}
+.badge.paid{background:var(--teal-l);color:var(--teal-d)}
+.badge.due{background:var(--amber-l);color:var(--amber)}
+.badge.overdue,.badge.open{background:var(--red-l);color:var(--red)}
+.badge.partial{background:var(--blue-l);color:var(--blue)}
+.badge.resolved{background:var(--teal-l);color:var(--teal-d)}
+.badge.monitor{background:var(--amber-l);color:var(--amber)}
+.badge.wod{background:var(--water-l);color:var(--water)}
 
-  /* ── HOUSEHOLD ROW ── */
-  .hh-row{display:flex;align-items:center;gap:10px}
-  .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-  .hh-name{font-size:14px;font-weight:600;flex:1}
-  .hh-meta{font-size:12px;color:var(--muted);margin-top:3px}
+/* ── TYPE TAGS ──────────────────────────────── */
+.type-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.type-tag{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600;background:#f0f2f5;color:var(--mu)}
+.type-tag.res{background:#e0f5ee;color:#0e7057}
+.type-tag.biz{background:#fdf0d8;color:#854F0B}
+.type-tag.pub{background:#e8eefb;color:#3060b8}
+.type-tag.wod{background:#e3f0fb;color:#2e7fc1}
 
-  /* ── LOG ITEMS ── */
-  .log-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f0f0f0}
-  .log-item:last-child{border-bottom:none}
-  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
-  .dot.green{background:var(--teal)}
-  .dot.amber{background:var(--amber)}
-  .dot.red{background:var(--red)}
-  .log-body{flex:1;font-size:13px}
-  .log-sub{font-size:11px;color:var(--muted);margin-top:2px}
-  .log-date{font-size:11px;color:var(--faint);flex-shrink:0}
+/* ── PROGRESS ───────────────────────────────── */
+.prog{height:5px;background:#eaecef;border-radius:3px;overflow:hidden;margin:8px 0 4px}
+.pf{height:100%;border-radius:3px;background:var(--teal);transition:width .6s}
+.pf.am{background:var(--amber)}
+.pf.bl{background:var(--water)}
 
-  /* ── FORM ── */
-  .form-group{margin-bottom:12px}
-  .form-group label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
-  .form-group label .urdu-lbl{font-size:11px;color:var(--faint);direction:rtl;margin-left:4px}
-  .form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:var(--surface);color:var(--text);transition:border-color 0.15s}
-  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--teal)}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .btn{padding:9px 16px;border-radius:7px;border:1px solid var(--border);background:var(--surface);font-size:13px;cursor:pointer;color:var(--text);font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:background 0.15s}
-  .btn:hover{background:#f0f0f0}
-  .btn.primary{background:var(--teal);color:#fff;border-color:var(--teal)}
-  .btn.primary:hover{background:var(--teal-dark)}
-  .btn-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-  .btn.full{width:100%;justify-content:center;margin-top:8px}
+/* ── HOUSEHOLD ROW ──────────────────────────── */
+.hrow{display:flex;align-items:flex-start;gap:11px}
+.av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:1px}
+.hn{font-size:14px;font-weight:700;flex:1;min-width:0}
+.hm{font-size:12px;color:var(--mu);margin-top:2px}
 
-  /* ── NETWORK STATUS ── */
-  .net-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f0f0f0}
-  .net-row:last-child{border-bottom:none}
-  .net-name{flex:1;font-size:13px}
+/* ── LOG ITEMS ──────────────────────────────── */
+.li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f0f2f5}
+.li:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.dot.g{background:var(--teal)} .dot.a{background:#EF9F27} .dot.r{background:var(--red)} .dot.b{background:var(--water)}
+.lb{flex:1;font-size:13px;line-height:1.4}
+.ls{font-size:11px;color:var(--mu);margin-top:2px}
+.ld{font-size:11px;color:var(--fa);flex-shrink:0;padding-top:3px}
 
-  /* ── EMPTY STATE ── */
-  .empty{text-align:center;padding:32px 16px;color:var(--muted);font-size:13px}
-  .empty svg{width:40px;height:40px;stroke:var(--faint);fill:none;stroke-width:1.5;margin:0 auto 10px;display:block}
+/* ── NETWORK ROW ────────────────────────────── */
+.nr{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #f0f2f5}
+.nr:last-child{border-bottom:none}
+.nn{flex:1;font-size:13px}
 
-  /* ── MODAL ── */
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:200;padding:16px}
-  .modal-box{background:var(--surface);border-radius:14px;padding:20px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.15)}
-  .modal-title{font-size:16px;font-weight:600;margin-bottom:16px}
+/* ── FORMS ──────────────────────────────────── */
+.mg{margin-bottom:13px}
+label{font-size:12px;color:var(--mu);display:block;margin-bottom:5px;font-weight:600;letter-spacing:.01em}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--r8);font-size:14px;background:var(--card);color:var(--tx);-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--teal)}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{padding:10px 16px;border-radius:var(--r8);border:1.5px solid var(--border);background:var(--card);font-size:13px;cursor:pointer;color:var(--tx);font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:background .12s;letter-spacing:.01em}
+.btn:active{background:#f0f2f5}
+.btn.p{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn.p:active{background:var(--teal-d)}
+.btn.p2{background:var(--water);color:#fff;border-color:var(--water)}
+.btn.fw{width:100%;margin-top:8px}
+.brow{display:flex;gap:8px;margin-top:14px}
 
-  /* ── TOAST ── */
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none}
-  .toast.show{opacity:1}
+/* ── CHECKBOX GROUP ─────────────────────────── */
+.check-group{display:flex;flex-direction:column;gap:7px;padding:4px 0}
+.check-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--r8);cursor:pointer;transition:all .12s;user-select:none}
+.check-item:active{background:#f8f9fa}
+.check-item.checked{border-color:var(--teal);background:var(--teal-l)}
+.check-item.wod-checked{border-color:var(--water);background:var(--water-l)}
+.check-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);flex-shrink:0;cursor:pointer}
+.check-item .ci-label{flex:1;font-size:13px;font-weight:500;color:var(--tx)}
+.check-item .ci-fee{font-size:12px;color:var(--mu);font-weight:400}
+.check-divider{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;padding:10px 0 4px;border-top:1px solid var(--border);margin-top:6px}
 
-  /* ── URDU SECONDARY TEXT ── */
-  .urdu{direction:rtl;font-size:11px;color:var(--muted)}
+/* ── EMPTY ──────────────────────────────────── */
+.empty{text-align:center;padding:28px 16px;color:var(--mu);font-size:13px}
 
-  /* ── STATUS COLORS ── */
-  .status-ok{color:var(--teal-dark)}
-  .status-warn{color:var(--amber-text)}
-  .status-err{color:var(--red-text)}
+/* ── HINT ───────────────────────────────────── */
+.hint{border-radius:var(--r8);padding:11px 13px;margin-bottom:14px;font-size:12px;line-height:1.6}
+.hint.green{background:#e8f5e9;color:#1b6e2f}
+.hint.blue{background:var(--water-l);color:#1a4e7a}
 
-  @media(max-width:400px){
-    .stat-val{font-size:16px}
-    .two-col{grid-template-columns:1fr}
-  }
+/* ── MODAL ──────────────────────────────────── */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;z-index:200}
+.mb{background:var(--card);border-radius:20px 20px 0 0;padding:8px 20px 40px;width:100%;max-width:540px;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mhandle{width:36px;height:4px;background:#d8dde3;border-radius:2px;margin:12px auto 18px}
+.mt{font-size:17px;font-weight:700;margin-bottom:16px}
+
+/* ── SECTION DIVIDER ────────────────────────── */
+.sdiv{display:flex;align-items:center;gap:10px;margin:16px 0 12px}
+.sdiv-line{flex:1;height:1px;background:var(--border)}
+.sdiv-label{font-size:11px;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.sdiv-icon{width:20px;height:20px;fill:none;stroke:var(--teal);stroke-width:2;flex-shrink:0}
+.sdiv-icon.water{stroke:var(--water)}
+
+/* ── FEE TABLE ──────────────────────────────── */
+.fee-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f0f2f5}
+.fee-row:last-child{border-bottom:none}
+.fee-label{font-size:13px;color:var(--mu)}
+.fee-val{font-size:13px;font-weight:700}
+
+/* ── TOAST ──────────────────────────────────── */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1c1f23;color:#fff;padding:11px 22px;border-radius:10px;font-size:13px;z-index:300;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.toast.show{opacity:1}
+
+@media(max-width:380px){.sv{font-size:14px}.two{grid-template-columns:1fr}.btitle{font-size:16px}}
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
-<div class="topbar">
-  <div class="topbar-brand">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z"/></svg>
+<div class="bar">
+  <div class="brand">
+    <div class="logo-wrap">
+      <svg class="logo" viewBox="0 0 24 24"><path d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z"/></svg>
+    </div>
     <div>
-      <div class="topbar-title">WOD SAR</div>
-      <div class="urdu" style="color:var(--teal-mid)">گلمت واٹر کمیٹی</div>
+      <div class="btitle">WOD SAR</div>
+      <div class="bsub">گلمت واٹر کمیٹی</div>
     </div>
   </div>
-  <div class="topbar-right">
-    <button class="sync-btn" onclick="syncData()" id="sync-btn">
-      <svg id="sync-icon" viewBox="0 0 24 24" width="14" height="14" stroke="#fff" fill="none" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>
-      Sync
+  <div style="text-align:right">
+    <button class="sbtn" id="sync-btn" onclick="syncData()">
+      <svg id="si" viewBox="0 0 24 24" width="13" height="13" stroke="#fff" fill="none" stroke-width="2.4"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15"/></svg>Sync
     </button>
-    <div style="color:var(--teal-mid);font-size:10px;margin-top:2px" id="sync-status">Not synced</div>
+    <div class="stime" id="ss">Tap to sync</div>
   </div>
 </div>
 
-<!-- SETUP BANNER (shown until Sheet ID configured) -->
-<div class="setup-banner" id="setup-banner">
-  <strong>⚙️ One-time setup — connect your Google Sheet</strong>
-  <ol>
-    <li>Open <a href="https://sheets.google.com" target="_blank">Google Sheets</a> → create a new sheet named <strong>WOD_SAR</strong></li>
-    <li>Add 4 tabs: <code>Households</code>, <code>Payments</code>, <code>Incidents</code>, <code>Network</code></li>
-    <li>Go to <strong>Extensions → Apps Script</strong>, paste the provided script, and deploy as a Web App (Anyone access)</li>
-    <li>Paste your deployed Web App URL below:</li>
-    <li><strong>⚠️ If you already deployed before:</strong> go to Deploy → Manage deployments → edit your deployment → set version to <em>New version</em> → Update. The URL stays the same.</li>
-  </ol>
-  <input type="text" id="sheet-url-input" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" value="">
-  <br>
-  <button class="save-btn" onclick="saveSheetUrl()">Save & Connect</button>
-  <div style="margin-top:10px;font-size:12px;color:#666">
-    📋 <strong>Google Apps Script to paste:</strong>
-    <pre id="apps-script-code" style="background:#f8f9fa;border:1px solid #ddd;border-radius:6px;padding:10px;font-size:11px;overflow-x:auto;margin-top:6px;line-height:1.5;white-space:pre-wrap"></pre>
-    <button onclick="copyScript()" style="margin-top:6px;padding:5px 12px;font-size:12px;border:1px solid #ccc;border-radius:5px;cursor:pointer;background:#fff">📋 Copy script</button>
+<!-- SETUP SCREEN -->
+<div id="setup-screen" style="display:none">
+  <div class="setup-card" style="margin-top:20px">
+    <h2>Connect your Google Sheet</h2>
+    <p>Paste your Google Apps Script URL to connect WOD SAR to live data. Your Sheet needs tabs: <strong>Households, Payments, Incidents, Network, WodFees</strong>.</p>
+    <ol>
+      <li>Open your Sheet → <strong>Extensions → Apps Script</strong></li>
+      <li>Paste the WOD SAR script, save</li>
+      <li><strong>Deploy → Web App</strong> → Execute as Me · Anyone</li>
+      <li>Copy the URL and paste below</li>
+    </ol>
+    <input class="inp" type="url" id="url-input" placeholder="https://script.google.com/macros/s/.../exec" style="margin-bottom:0">
+    <button class="btn-go" onclick="saveUrl()">Connect & Sync</button>
+    <button class="btn-skip" onclick="skipSetup()">Use sample data for now</button>
   </div>
 </div>
 
-<!-- NAV -->
-<nav class="nav" role="navigation" aria-label="Main navigation">
-  <button class="nav-btn active" onclick="switchTab('dashboard')" aria-label="Dashboard">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    Dashboard
-  </button>
-  <button class="nav-btn" onclick="switchTab('households')" aria-label="Households">
-    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    Households
-  </button>
-  <button class="nav-btn" onclick="switchTab('fees')" aria-label="Payments">
-    <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-    Payments
-  </button>
-  <button class="nav-btn" onclick="switchTab('incidents')" aria-label="Incidents">
-    <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    Incidents
-  </button>
-  <button class="nav-btn" onclick="switchTab('record')" aria-label="Record payment">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    Record
-  </button>
-</nav>
+<!-- MAIN APP -->
+<div id="main-app" style="display:none">
+  <nav class="nav">
+    <button class="nb active" onclick="tab('dashboard',this)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
+    </button>
+    <button class="nb" onclick="tab('hh',this)">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Households
+    </button>
+    <button class="nb" onclick="tab('pay',this)">
+      <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Payments
+    </button>
+    <button class="nb" onclick="tab('wod',this)">
+      <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>Wod Fees
+    </button>
+    <button class="nb" onclick="tab('inc',this)">
+      <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Incidents
+    </button>
+    <button class="nb" onclick="tab('rec',this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Record
+    </button>
+  </nav>
 
-<!-- ══════════════ DASHBOARD ══════════════ -->
-<div class="panel active" id="panel-dashboard">
-  <div class="stat-grid" id="dash-stats">
-    <div class="stat"><div class="stat-val green" id="d-households">—</div><div class="stat-lbl">Households<span class="urdu">گھرانے</span></div></div>
-    <div class="stat"><div class="stat-val green" id="d-collected">—</div><div class="stat-lbl">Collected<span class="urdu">وصول شدہ</span></div></div>
-    <div class="stat"><div class="stat-val amber" id="d-outstanding">—</div><div class="stat-lbl">Outstanding<span class="urdu">باقی رقم</span></div></div>
-  </div>
-
-  <div class="section-label">Collection progress <span class="urdu" style="float:right;text-transform:none">وصولی پیشرفت</span></div>
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted)">
-      <span id="d-paid-count">— paid</span>
-      <span id="d-percent">0%</span>
+  <!-- ── DASHBOARD ── -->
+  <div class="panel active" id="panel-dashboard">
+    <!-- Tap Water Stats -->
+    <div class="sdiv"><svg class="sdiv-icon" viewBox="0 0 24 24"><path d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z"/></svg><span class="sdiv-label">Tap Water</span><div class="sdiv-line"></div></div>
+    <div class="sgrid">
+      <div class="stat"><div class="sv gn" id="d-hh">—</div><div class="sl">Households<br><span style="direction:rtl">گھرانے</span></div></div>
+      <div class="stat"><div class="sv gn" id="d-col">—</div><div class="sl">Collected<br><span style="direction:rtl">وصول شدہ</span></div></div>
+      <div class="stat"><div class="sv am" id="d-out">—</div><div class="sl">Outstanding<br><span style="direction:rtl">باقی رقم</span></div></div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="d-progress" style="width:0%"></div></div>
-    <div style="font-size:12px;color:var(--muted)" id="d-goal-text">Annual collection goal</div>
-  </div>
-
-  <div class="section-label">Network status <span class="urdu" style="float:right;text-transform:none">نیٹ ورک حالت</span></div>
-  <div class="card" id="network-status-list">
-    <div class="empty">Loading network status…</div>
-  </div>
-
-  <div class="section-label">Recent activity</div>
-  <div class="card" id="recent-activity">
-    <div class="empty">Loading…</div>
-  </div>
-</div>
-
-<!-- ══════════════ HOUSEHOLDS ══════════════ -->
-<div class="panel" id="panel-households">
-  <div style="display:flex;gap:8px;margin-bottom:12px">
-    <input type="text" id="hh-search" placeholder="Search household…" style="flex:1;padding:9px 11px;border:1px solid var(--border);border-radius:7px;font-size:13px" oninput="renderHouseholds()">
-    <select id="hh-filter" onchange="renderHouseholds()" style="padding:9px 11px;border:1px solid var(--border);border-radius:7px;font-size:13px;background:var(--surface)">
-      <option value="">All</option>
-      <option value="Paid">Paid</option>
-      <option value="Due">Due</option>
-      <option value="Overdue">Overdue</option>
-      <option value="Partial">Partial</option>
-    </select>
-  </div>
-  <div id="households-list"><div class="empty">Loading households…</div></div>
-  <button class="btn full" onclick="openAddHHModal()">
-    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    Add household
-  </button>
-</div>
-
-<!-- ══════════════ PAYMENTS ══════════════ -->
-<div class="panel" id="panel-fees">
-  <div class="section-label">Fee structure <span class="urdu" style="float:right;text-transform:none">فیس</span></div>
-  <div class="card" id="fee-structure">
-    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0">
-      <span style="font-size:13px;color:var(--muted)">Residential per connection / year</span>
-      <span style="font-size:14px;font-weight:600;color:var(--teal-dark)">PKR 1,200</span>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--mu)"><span id="d-pc">—</span><span id="d-pct">0%</span></div>
+      <div class="prog"><div class="pf" id="d-pb" style="width:0%"></div></div>
+      <div style="font-size:12px;color:var(--mu)" id="d-gl">—</div>
     </div>
-    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0">
-      <span style="font-size:13px;color:var(--muted)">6-month installment</span>
-      <span style="font-size:13px">PKR 600</span>
+
+    <!-- Wod Stats -->
+    <div class="sdiv" style="margin-top:20px"><svg class="sdiv-icon water" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><span class="sdiv-label">Irrigation Wods</span><div class="sdiv-line"></div></div>
+    <div class="sgrid">
+      <div class="stat"><div class="sv bl" id="w-hh">—</div><div class="sl">Wod Members</div></div>
+      <div class="stat"><div class="sv bl" id="w-col">—</div><div class="sl">Collected</div></div>
+      <div class="stat"><div class="sv am" id="w-out">—</div><div class="sl">Outstanding</div></div>
     </div>
-    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0">
-      <span style="font-size:13px;color:var(--muted)">Hotels / businesses</span>
-      <span style="font-size:13px">PKR 3,000 / year</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:6px 0">
-      <span style="font-size:13px;color:var(--muted)">Public points</span>
-      <span style="font-size:13px">Committee discretion</span>
-    </div>
+
+    <!-- Network -->
+    <div class="sec">Network status <span class="sec-urdu">نیٹ ورک حالت</span></div>
+    <div class="card" id="net-list"><div class="empty">Loading…</div></div>
+    <div class="sec">Recent activity</div>
+    <div class="card" id="rec-list"><div class="empty">Loading…</div></div>
   </div>
 
-  <div class="section-label">Payment log <span class="urdu" style="float:right;text-transform:none">ادائیگی ریکارڈ</span></div>
-  <div class="card" id="payments-list"><div class="empty">Loading payments…</div></div>
-</div>
-
-<!-- ══════════════ INCIDENTS ══════════════ -->
-<div class="panel" id="panel-incidents">
-  <div class="section-label">Active incidents <span class="urdu" style="float:right;text-transform:none">جاری مسائل</span></div>
-  <div id="incidents-open"><div class="empty">Loading…</div></div>
-
-  <div class="section-label">Resolved</div>
-  <div id="incidents-resolved"><div class="empty">No resolved incidents yet.</div></div>
-
-  <button class="btn full" onclick="openIncidentModal()">
-    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    Log new incident
-  </button>
-</div>
-
-<!-- ══════════════ RECORD PAYMENT ══════════════ -->
-<div class="panel" id="panel-record">
-  <div class="section-label">Record a payment <span class="urdu" style="float:right;text-transform:none">ادائیگی درج کریں</span></div>
-  <div style="background:#e8f5e9;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:12px;color:#2e7d32">
-    💡 Payments recorded here are saved directly to your Google Sheet and the household ledger is updated automatically.
-  </div>
-
-  <div class="form-group">
-    <label>Household <span class="urdu-lbl">گھرانہ</span></label>
-    <select id="rec-household">
-      <option value="">Select household…</option>
-    </select>
-  </div>
-  <div class="two-col">
-    <div class="form-group">
-      <label>Amount (PKR) <span class="urdu-lbl">رقم</span></label>
-      <input type="number" id="rec-amount" placeholder="1200" min="0">
-    </div>
-    <div class="form-group">
-      <label>Date <span class="urdu-lbl">تاریخ</span></label>
-      <input type="date" id="rec-date">
-    </div>
-  </div>
-  <div class="two-col">
-    <div class="form-group">
-      <label>Payment type <span class="urdu-lbl">قسم</span></label>
-      <select id="rec-type">
-        <option>Annual — full</option>
-        <option>Installment 1 of 2</option>
-        <option>Installment 2 of 2</option>
-        <option>Arrears / overdue</option>
-        <option>Business annual</option>
-        <option>Other</option>
+  <!-- ── HOUSEHOLDS ── -->
+  <div class="panel" id="panel-hh">
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <input class="inp" type="text" id="hhs" placeholder="Search household…" style="flex:1;margin:0" oninput="rHH()">
+      <select class="inp" id="hhf" onchange="rHH()" style="width:auto;min-width:85px;margin:0">
+        <option value="">All</option><option>Paid</option><option>Due</option><option>Overdue</option><option>Partial</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>Method <span class="urdu-lbl">طریقہ</span></label>
-      <select id="rec-method">
-        <option>Cash</option>
-        <option>Bank transfer</option>
-        <option>EasyPaisa</option>
-        <option>JazzCash</option>
+    <div id="hh-list"><div class="empty">Loading…</div></div>
+    <button class="btn fw" onclick="om('m-hh')">+ Add household</button>
+  </div>
+
+  <!-- ── PAYMENTS ── -->
+  <div class="panel" id="panel-pay">
+    <div class="tab-pills" id="pay-pills">
+      <button class="pill active" onclick="payTab('tap',this)">💧 Tap Water</button>
+      <button class="pill" onclick="payTab('wod',this)">🌊 Irrigation Wods</button>
+    </div>
+    <div id="pay-tap-view">
+      <div class="sec">Tap water fee structure</div>
+      <div class="card">
+        <div class="fee-row"><span class="fee-label">Residential / connection / year</span><span class="fee-val gn">PKR 1,200</span></div>
+        <div class="fee-row"><span class="fee-label">6-month installment</span><span class="fee-val">PKR 600</span></div>
+        <div class="fee-row"><span class="fee-label">Business / Hotel / year</span><span class="fee-val">PKR 3,000</span></div>
+        <div class="fee-row"><span class="fee-label">Public point</span><span class="fee-val" style="font-weight:400;color:var(--mu)">Committee discretion</span></div>
+      </div>
+      <div class="sec">Payment log</div>
+      <div class="card" id="pay-list"><div class="empty">No payments yet</div></div>
+    </div>
+    <div id="pay-wod-view" style="display:none">
+      <div class="sec">Wod fee structure</div>
+      <div class="card" id="wod-fee-structure">
+        <div class="fee-row"><span class="fee-label">Chamangul Lup Wod</span><span class="fee-val bl">PKR 800 / year</span></div>
+        <div class="fee-row"><span class="fee-label">Dalgiram Lup Wod</span><span class="fee-val bl">PKR 800 / year</span></div>
+        <div class="fee-row"><span class="fee-label">Wod 3 (placeholder)</span><span class="fee-val bl">PKR 800 / year</span></div>
+        <div class="fee-row"><span class="fee-label">Wod 4 (placeholder)</span><span class="fee-val bl">PKR 800 / year</span></div>
+      </div>
+      <div class="sec">Wod fee log</div>
+      <div class="card" id="wod-pay-list"><div class="empty">No wod payments yet</div></div>
+    </div>
+  </div>
+
+  <!-- ── WOD FEES ── -->
+  <div class="panel" id="panel-wod">
+    <div class="hint blue">🌊 Irrigation channel fees are collected separately per Wod. Each household can be a member of one or more Wods.</div>
+    <div id="wod-hh-list"><div class="empty">Loading…</div></div>
+    <button class="btn fw p2" onclick="om('m-wod-pay')">+ Record Wod payment</button>
+  </div>
+
+  <!-- ── INCIDENTS ── -->
+  <div class="panel" id="panel-inc">
+    <div class="sec">Open incidents <span class="sec-urdu">جاری مسائل</span></div>
+    <div id="inc-open"><div class="empty">No open incidents ✓</div></div>
+    <div class="sec">Resolved</div>
+    <div id="inc-res"><div class="empty">None yet</div></div>
+    <button class="btn fw" onclick="om('m-inc')">+ Log new incident</button>
+  </div>
+
+  <!-- ── RECORD ── -->
+  <div class="panel" id="panel-rec">
+    <div class="tab-pills" id="rec-pills">
+      <button class="pill active" onclick="recTab('tap',this)">💧 Tap Water</button>
+      <button class="pill" onclick="recTab('wod',this)">🌊 Irrigation Wod</button>
+    </div>
+
+    <!-- TAP WATER RECORD -->
+    <div id="rec-tap-view">
+      <div class="hint green">💡 Payments save directly to Google Sheet and update the household ledger.</div>
+      <div class="mg"><label>Household <span style="direction:rtl;font-size:11px;font-weight:400;color:var(--fa)">گھرانہ</span></label><select class="inp" id="r-hh" style="margin:0"><option value="">Select household…</option></select></div>
+      <div class="two">
+        <div class="mg"><label>Amount (PKR)</label><input class="inp" type="number" id="r-amt" placeholder="1200" min="0" inputmode="numeric" style="margin:0"></div>
+        <div class="mg"><label>Date</label><input class="inp" type="date" id="r-dt" style="margin:0"></div>
+      </div>
+      <div class="two">
+        <div class="mg"><label>Type</label><select class="inp" id="r-tp" style="margin:0"><option>Annual — full</option><option>Installment 1 of 2</option><option>Installment 2 of 2</option><option>Arrears / overdue</option><option>Business annual</option><option>Other</option></select></div>
+        <div class="mg"><label>Method</label><select class="inp" id="r-mt" style="margin:0"><option>Cash</option><option>Bank transfer</option><option>EasyPaisa</option><option>JazzCash</option></select></div>
+      </div>
+      <div class="mg"><label>Received by <span style="direction:rtl;font-size:11px;font-weight:400;color:var(--fa)">وصول کنندہ</span></label><input class="inp" type="text" id="r-by" placeholder="Committee member name" style="margin:0"></div>
+      <div class="mg"><label>Notes (optional)</label><input class="inp" type="text" id="r-nt" placeholder="e.g. partial waiver…" style="margin:0"></div>
+      <div class="brow">
+        <button class="btn p" style="flex:1" onclick="subPay()">✓ Save payment</button>
+        <button class="btn" onclick="clrRec()">Clear</button>
+      </div>
+    </div>
+
+    <!-- WOD RECORD -->
+    <div id="rec-wod-view" style="display:none">
+      <div class="hint blue">🌊 Record an irrigation Wod fee payment.</div>
+      <div class="mg"><label>Household</label><select class="inp" id="rw-hh" style="margin:0"><option value="">Select household…</option></select></div>
+      <div class="mg"><label>Wod channel</label>
+        <select class="inp" id="rw-wod" style="margin:0">
+          <option value="">Select Wod…</option>
+          <option value="Chamangul Lup Wod">Chamangul Lup Wod</option>
+          <option value="Dalgiram Lup Wod">Dalgiram Lup Wod</option>
+          <option value="Wod 3 (placeholder)">Wod 3 (placeholder)</option>
+          <option value="Wod 4 (placeholder)">Wod 4 (placeholder)</option>
+        </select>
+      </div>
+      <div class="two">
+        <div class="mg"><label>Amount (PKR)</label><input class="inp" type="number" id="rw-amt" placeholder="800" min="0" inputmode="numeric" style="margin:0"></div>
+        <div class="mg"><label>Date</label><input class="inp" type="date" id="rw-dt" style="margin:0"></div>
+      </div>
+      <div class="mg"><label>Method</label><select class="inp" id="rw-mt" style="margin:0"><option>Cash</option><option>Bank transfer</option><option>EasyPaisa</option><option>JazzCash</option></select></div>
+      <div class="mg"><label>Received by</label><input class="inp" type="text" id="rw-by" placeholder="Committee member name" style="margin:0"></div>
+      <div class="brow">
+        <button class="btn p2" style="flex:1" onclick="subWodPay()">✓ Save Wod payment</button>
+        <button class="btn" onclick="clrWodRec()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD HOUSEHOLD MODAL ── -->
+<div class="mo" id="m-hh" style="display:none" onclick="bgClose(event,'m-hh')">
+  <div class="mb">
+    <div class="mhandle"></div>
+    <div class="mt">Add household <span style="direction:rtl;font-size:13px;font-weight:400;color:var(--mu)">گھرانہ شامل کریں</span></div>
+    <div class="mg"><label>Full name</label><input class="inp" type="text" id="m-nm" placeholder="e.g. Khan, Karim Ullah" style="margin:0"></div>
+    <div class="two">
+      <div class="mg"><label>House / Unit no.</label><input class="inp" type="text" id="m-hs" placeholder="H-12" style="margin:0"></div>
+      <div class="mg"><label>Phone (optional)</label><input class="inp" type="tel" id="m-ph" placeholder="03xx-xxxxxxx" inputmode="tel" style="margin:0"></div>
+    </div>
+
+    <!-- TAP WATER CONNECTIONS -->
+    <div class="sdiv"><svg class="sdiv-icon" viewBox="0 0 24 24"><path d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z"/></svg><span class="sdiv-label">Tap water connections</span><div class="sdiv-line"></div></div>
+    <div class="mg">
+      <label>Select all that apply</label>
+      <div class="check-group" id="tap-checks">
+        <label class="check-item" onclick="toggleCheck(this,'tap')">
+          <input type="checkbox" value="Residential" onchange="calcFee()"> <span class="ci-label">Residential</span><span class="ci-fee">PKR 1,200/yr</span>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this,'tap')">
+          <input type="checkbox" value="Business / Hotel" onchange="calcFee()"> <span class="ci-label">Business / Hotel</span><span class="ci-fee">PKR 3,000/yr</span>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this,'tap')">
+          <input type="checkbox" value="Restaurant" onchange="calcFee()"> <span class="ci-label">Restaurant</span><span class="ci-fee">PKR 3,000/yr</span>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this,'tap')">
+          <input type="checkbox" value="Public point" onchange="calcFee()"> <span class="ci-label">Public point</span><span class="ci-fee">Committee fee</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- IRRIGATION WOD MEMBERSHIPS -->
+    <div class="sdiv"><svg class="sdiv-icon water" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><span class="sdiv-label">Irrigation Wod memberships</span><div class="sdiv-line"></div></div>
+    <div class="mg">
+      <label>Select Wods used</label>
+      <div class="check-group" id="wod-checks">
+        <label class="check-item" onclick="toggleCheck(this,'wod')">
+          <input type="checkbox" value="Chamangul Lup Wod" onchange="calcFee()"> <span class="ci-label">Chamangul Lup Wod</span><span class="ci-fee">PKR 800/yr</span>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this,'wod')">
+          <input type="checkbox" value="Dalgiram Lup Wod" onchange="calcFee()"> <span class="ci-label">Dalgiram Lup Wod</span><span class="ci-fee">PKR 800/yr</span>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this,'wod')">
+          <input type="checkbox" value="Wod 3 (placeholder)" onchange="calcFee()"> <span class="ci-label">Wod 3 (placeholder)</span><span class="ci-fee">PKR 800/yr</span>
+        </label>
+        <label class="check-item" onclick="toggleCheck(this,'wod')">
+          <input type="checkbox" value="Wod 4 (placeholder)" onchange="calcFee()"> <span class="ci-label">Wod 4 (placeholder)</span><span class="ci-fee">PKR 800/yr</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- FEE SUMMARY -->
+    <div class="card" id="fee-summary" style="background:#f8fffe;border-color:var(--teal);margin-bottom:14px;display:none">
+      <div style="font-size:12px;color:var(--mu);margin-bottom:6px;font-weight:600">ANNUAL FEE SUMMARY</div>
+      <div id="fee-lines"></div>
+      <div style="display:flex;justify-content:space-between;padding-top:8px;margin-top:6px;border-top:1px solid var(--border);font-weight:700">
+        <span>Total annual fee</span><span id="fee-total" class="gn">PKR 0</span>
+      </div>
+    </div>
+
+    <div class="brow">
+      <button class="btn p" style="flex:1" onclick="subHH()">Add household</button>
+      <button class="btn" onclick="cm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOG INCIDENT MODAL ── -->
+<div class="mo" id="m-inc" style="display:none" onclick="bgClose(event,'m-inc')">
+  <div class="mb">
+    <div class="mhandle"></div>
+    <div class="mt">Log incident</div>
+    <div class="mg"><label>Title</label><input class="inp" type="text" id="i-tt" placeholder="e.g. Pipe break — Branch C" style="margin:0"></div>
+    <div class="mg"><label>Type</label><select class="inp" id="i-ty" style="margin:0"><option>Pipe break / damage</option><option>Rockfall damage</option><option>Low water pressure</option><option>Spring output change</option><option>Wod channel blockage</option><option>Contamination concern</option><option>Other</option></select></div>
+    <div class="two">
+      <div class="mg"><label>Location / line</label><input class="inp" type="text" id="i-lo" placeholder="Branch C, km 2.1" style="margin:0"></div>
+      <div class="mg"><label>Households affected</label><input class="inp" type="number" id="i-af" min="0" placeholder="0" inputmode="numeric" style="margin:0"></div>
+    </div>
+    <div class="mg"><label>Details</label><textarea class="inp" id="i-dt" rows="3" style="resize:vertical;margin:0" placeholder="Describe the issue and action taken…"></textarea></div>
+    <div class="brow">
+      <button class="btn p" style="flex:1" onclick="subInc()">Log incident</button>
+      <button class="btn" onclick="cm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── QUICK PAY MODAL ── -->
+<div class="mo" id="m-qp" style="display:none" onclick="bgClose(event,'m-qp')">
+  <div class="mb">
+    <div class="mhandle"></div>
+    <div class="mt" id="qp-t">Record payment</div>
+    <div class="mg"><label>Amount (PKR)</label><input class="inp" type="number" id="qp-a" min="0" inputmode="numeric" style="margin:0"></div>
+    <div class="mg"><label>Method</label><select class="inp" id="qp-m" style="margin:0"><option>Cash</option><option>EasyPaisa</option><option>JazzCash</option><option>Bank transfer</option></select></div>
+    <div class="mg"><label>Received by</label><input class="inp" type="text" id="qp-b" placeholder="Committee member name" style="margin:0"></div>
+    <div class="brow">
+      <button class="btn p" style="flex:1" onclick="subQP()">Save payment</button>
+      <button class="btn" onclick="cm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── WOD QUICK PAY MODAL ── -->
+<div class="mo" id="m-wod-pay" style="display:none" onclick="bgClose(event,'m-wod-pay')">
+  <div class="mb">
+    <div class="mhandle"></div>
+    <div class="mt">Record Wod payment</div>
+    <div class="mg"><label>Household</label><select class="inp" id="mw-hh" style="margin:0"><option value="">Select…</option></select></div>
+    <div class="mg"><label>Wod channel</label>
+      <select class="inp" id="mw-wod" style="margin:0">
+        <option value="">Select Wod…</option>
+        <option>Chamangul Lup Wod</option>
+        <option>Dalgiram Lup Wod</option>
+        <option>Wod 3 (placeholder)</option>
+        <option>Wod 4 (placeholder)</option>
       </select>
     </div>
-  </div>
-  <div class="form-group">
-    <label>Notes (optional) <span class="urdu-lbl">نوٹ</span></label>
-    <input type="text" id="rec-notes" placeholder="e.g. paid via family member, partial waiver…">
-  </div>
-  <div class="form-group">
-    <label>Received by (committee member) <span class="urdu-lbl">وصول کنندہ</span></label>
-    <input type="text" id="rec-by" placeholder="Name of committee member">
-  </div>
-  <div class="btn-row">
-    <button class="btn primary" style="flex:1" onclick="submitPayment()">
-      <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-      Save to Google Sheet
-    </button>
-    <button class="btn" onclick="clearForm()">Clear</button>
-  </div>
-</div>
-
-<!-- ══════════════ ADD HOUSEHOLD MODAL ══════════════ -->
-<div class="modal-overlay" id="add-hh-modal" style="display:none">
-  <div class="modal-box">
-    <div class="modal-title">Add household <span class="urdu" style="font-size:12px">گھرانہ شامل کریں</span></div>
-    <div class="form-group"><label>Full name</label><input type="text" id="m-name" placeholder="e.g. Khan, Karim Ullah"></div>
-    <div class="two-col">
-      <div class="form-group"><label>House / Unit no.</label><input type="text" id="m-house" placeholder="e.g. H-12"></div>
-      <div class="form-group"><label>Connections</label><input type="number" id="m-conn" value="1" min="1"></div>
+    <div class="two">
+      <div class="mg"><label>Amount (PKR)</label><input class="inp" type="number" id="mw-amt" value="800" min="0" inputmode="numeric" style="margin:0"></div>
+      <div class="mg"><label>Method</label><select class="inp" id="mw-mt" style="margin:0"><option>Cash</option><option>EasyPaisa</option><option>JazzCash</option><option>Bank transfer</option></select></div>
     </div>
-    <div class="form-group"><label>Type</label>
-      <select id="m-type"><option>Residential</option><option>Business / Hotel</option><option>Public point</option></select>
-    </div>
-    <div class="form-group"><label>Phone (optional)</label><input type="tel" id="m-phone" placeholder="03xx-xxxxxxx"></div>
-    <div class="btn-row">
-      <button class="btn primary" style="flex:1" onclick="submitAddHH()">Add household</button>
-      <button class="btn" onclick="closeModals()">Cancel</button>
+    <div class="mg"><label>Received by</label><input class="inp" type="text" id="mw-by" placeholder="Committee member name" style="margin:0"></div>
+    <div class="brow">
+      <button class="btn p2" style="flex:1" onclick="subWodPayModal()">Save Wod payment</button>
+      <button class="btn" onclick="cm()">Cancel</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════ LOG INCIDENT MODAL ══════════════ -->
-<div class="modal-overlay" id="incident-modal" style="display:none">
-  <div class="modal-box">
-    <div class="modal-title">Log incident <span class="urdu" style="font-size:12px">واقعہ درج کریں</span></div>
-    <div class="form-group"><label>Title</label><input type="text" id="i-title" placeholder="e.g. Pipe break — Branch C km 2.1"></div>
-    <div class="form-group"><label>Type</label>
-      <select id="i-type"><option>Pipe break / damage</option><option>Rockfall damage</option><option>Low water pressure</option><option>Spring output change</option><option>Contamination concern</option><option>Other</option></select>
-    </div>
-    <div class="form-group"><label>Location / line</label><input type="text" id="i-loc" placeholder="e.g. Branch C, km 2.1"></div>
-    <div class="form-group"><label>Households affected</label><input type="number" id="i-affected" min="0" placeholder="0"></div>
-    <div class="form-group"><label>Details</label><textarea id="i-details" rows="3" placeholder="Describe the issue and action taken…" style="resize:vertical"></textarea></div>
-    <div class="btn-row">
-      <button class="btn primary" style="flex:1" onclick="submitIncident()">Log incident</button>
-      <button class="btn" onclick="closeModals()">Cancel</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════
-//  CONFIGURATION
-// ═══════════════════════════════════════════════
-const STORAGE_KEY = 'wodsar_script_url';
-let SCRIPT_URL = localStorage.getItem(STORAGE_KEY) || '';
+// ── CONFIG ────────────────────────────────────
+const SK = 'wodsar_url_v2';
+let SURL = localStorage.getItem(SK) || '';
+let QPN = '', _payView = 'tap', _recView = 'tap';
 
-// ─── SAMPLE DATA (used when no Sheet connected) ───
+const WOD_FEES = {'Chamangul Lup Wod':800,'Dalgiram Lup Wod':800,'Wod 3 (placeholder)':800,'Wod 4 (placeholder)':800};
+const TAP_FEES = {'Residential':1200,'Business / Hotel':3000,'Restaurant':3000,'Public point':0};
+
+let D = {households:[],payments:[],incidents:[],network:[],wodfees:[]};
+
 const SAMPLE = {
   households:[
-    {id:'H001',name:'Khan, Karim Ullah',house:'H-12',connections:1,type:'Residential',phone:'0345-1234567',status:'Paid',paid:1200,owed:0},
-    {id:'H002',name:'Wali, Ghulam',house:'H-7',connections:1,type:'Residential',phone:'',status:'Due',paid:0,owed:1200},
-    {id:'H003',name:'Hussain, Mir',house:'H-23',connections:2,type:'Residential',phone:'0333-9876543',status:'Partial',paid:1200,owed:1200},
-    {id:'H004',name:'Baig, Sultan',house:'H-31',connections:1,type:'Residential',phone:'',status:'Overdue',paid:0,owed:2400},
-    {id:'H005',name:'Serena Hotel',house:'Commercial',connections:1,type:'Business / Hotel',phone:'0581-456789',status:'Paid',paid:3000,owed:0},
-    {id:'H006',name:'Ali, Rehmat',house:'H-5',connections:1,type:'Residential',phone:'',status:'Paid',paid:1200,owed:0},
+    {id:'H001',name:'Khan, Karim Ullah',house:'H-12',phone:'',tapTypes:'Residential',wods:'Chamangul Lup Wod',status:'Paid',tapPaid:1200,tapOwed:0,wodPaid:800,wodOwed:0},
+    {id:'H002',name:'Wali, Ghulam',house:'H-7',phone:'',tapTypes:'Residential',wods:'',status:'Due',tapPaid:0,tapOwed:1200,wodPaid:0,wodOwed:0},
+    {id:'H003',name:'Hussain, Mir',house:'H-23',phone:'',tapTypes:'Residential,Business / Hotel',wods:'Chamangul Lup Wod,Dalgiram Lup Wod',status:'Partial',tapPaid:1200,tapOwed:3000,wodPaid:0,wodOwed:1600},
+    {id:'H004',name:'Serena Hotel',house:'Commercial',phone:'',tapTypes:'Business / Hotel,Restaurant',wods:'',status:'Due',tapPaid:0,tapOwed:6000,wodPaid:0,wodOwed:0},
   ],
   payments:[
     {date:'2025-06-12',household:'Khan, Karim Ullah',amount:1200,type:'Annual — full',method:'Cash',by:'Gulzar Ahmed',notes:''},
-    {date:'2025-06-08',household:'Hussain, Mir',amount:1200,type:'Installment 1 of 2',method:'EasyPaisa',by:'Gulzar Ahmed',notes:'Conn A only'},
-    {date:'2025-06-01',household:'Serena Hotel',amount:3000,type:'Business annual',method:'Bank transfer',by:'Qurban Ali',notes:''},
-    {date:'2025-05-14',household:'Ali, Rehmat',amount:1200,type:'Annual — full',method:'Cash',by:'Gulzar Ahmed',notes:''},
   ],
   incidents:[
     {id:'I001',date:'2025-06-03',title:'Pipe break — Branch C, km 2.1',type:'Rockfall damage',location:'Branch C',affected:12,status:'Open',details:'Rockfall damage. Repair team dispatched.'},
-    {id:'I002',date:'2025-04-14',title:'Spring output drop — Chafchingal',type:'Spring output change',location:'Main spring',affected:68,status:'Resolved',details:'Seasonal reduction. Redirected from backup spring. Resolved in 3 days.'},
-    {id:'I003',date:'2025-02-02',title:'Pipe joint leak — Main line, km 0.8',type:'Pipe break / damage',location:'Main line',affected:68,status:'Resolved',details:'Minor joint failure. Replaced fittings. 4 hours downtime.'},
   ],
   network:[
     {line:'Main spring (Chafchingal)',status:'Active',note:'Normal flow'},
     {line:'Branch A (Upper Gulmit)',status:'Active',note:'Normal'},
     {line:'Branch B (Lower Gulmit)',status:'Monitor',note:'Reduced pressure'},
-    {line:'Branch C (Khyber road)',status:'Action needed',note:'Repair pending — pipe break'},
+    {line:'Branch C (Khyber road)',status:'Action needed',note:'Repair pending'},
+  ],
+  wodfees:[
+    {date:'2025-06-10',household:'Khan, Karim Ullah',wod:'Chamangul Lup Wod',amount:800,method:'Cash',by:'Qurban Ali'},
   ]
 };
 
-let DATA = JSON.parse(JSON.stringify(SAMPLE));
-
-// ═══════════════════════════════════════════════
-//  GOOGLE APPS SCRIPT CODE (to paste by user)
-// ═══════════════════════════════════════════════
-const APPS_SCRIPT = `// WOD SAR — Google Apps Script
-// All reads AND writes use doGet (GET requests) to avoid CORS issues from browser HTML files.
-// Deploy as: Web App → Execute as Me → Anyone can access
-
-function doGet(e) {
-  const p = e.parameter;
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const out = (obj) => ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-
-  // ── READ ALL ──────────────────────────────────
-  if (p.action === 'read') {
-    const result = {};
-    ['Households','Payments','Incidents','Network'].forEach(name => {
-      const sh = ss.getSheetByName(name);
-      if (!sh || sh.getLastRow() < 2) { result[name] = []; return; }
-      const rows = sh.getDataRange().getValues();
-      const headers = rows[0];
-      result[name] = rows.slice(1).map(r => {
-        const obj = {};
-        headers.forEach((h, i) => { obj[h] = r[i]; });
-        return obj;
-      });
-    });
-    return out(result);
-  }
-
-  // ── APPEND ROW ────────────────────────────────
-  if (p.action === 'append' && p.sheet && p.data) {
-    const sh = ss.getSheetByName(p.sheet);
-    if (!sh) return out({ok: false, error: 'Sheet not found: ' + p.sheet});
-    const rowData = JSON.parse(decodeURIComponent(p.data));
-    // If sheet is empty, write headers first
-    if (sh.getLastRow() === 0) {
-      sh.appendRow(Object.keys(rowData));
-    }
-    const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
-    const row = headers.map(h => rowData[h] !== undefined ? rowData[h] : '');
-    sh.appendRow(row);
-    return out({ok: true});
-  }
-
-  // ── UPDATE ROW (match by id column) ──────────
-  if (p.action === 'update' && p.sheet && p.id && p.data) {
-    const sh = ss.getSheetByName(p.sheet);
-    if (!sh) return out({ok: false, error: 'Sheet not found'});
-    const rowData = JSON.parse(decodeURIComponent(p.data));
-    const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
-    const idCol = headers.indexOf('id');
-    if (idCol < 0) return out({ok: false, error: 'No id column'});
-    const allData = sh.getDataRange().getValues();
-    for (let i = 1; i < allData.length; i++) {
-      if (String(allData[i][idCol]) === String(p.id)) {
-        headers.forEach((h, j) => {
-          if (rowData[h] !== undefined) sh.getRange(i + 1, j + 1).setValue(rowData[h]);
-        });
-        return out({ok: true});
-      }
-    }
-    return out({ok: false, error: 'Row not found'});
-  }
-
-  return out({ok: false, error: 'Unknown action: ' + p.action});
-}`;
-
-document.getElementById('apps-script-code').textContent = APPS_SCRIPT;
-
-function copyScript(){
-  navigator.clipboard.writeText(APPS_SCRIPT).then(()=>showToast('Script copied to clipboard!'));
+// ── INIT ──────────────────────────────────────
+function init(){
+  document.getElementById('r-dt').value = td();
+  document.getElementById('rw-dt').value = td();
+  if(SURL){ show('main-app'); syncData(); }
+  else { show('setup-screen'); }
 }
 
-// ═══════════════════════════════════════════════
-//  SETUP
-// ═══════════════════════════════════════════════
-function saveSheetUrl(){
-  const v = document.getElementById('sheet-url-input').value.trim();
-  if(!v || !v.startsWith('https://script.google.com')){
-    showToast('Please enter a valid Apps Script URL'); return;
-  }
-  SCRIPT_URL = v;
-  localStorage.setItem(STORAGE_KEY, v);
-  document.getElementById('setup-banner').style.display = 'none';
-  showToast('Connected! Syncing…');
-  syncData();
+function saveUrl(){
+  const v = document.getElementById('url-input').value.trim();
+  if(!v||!v.includes('script.google.com')){toast('Please enter a valid Apps Script URL');return;}
+  SURL=v; localStorage.setItem(SK,v); show('main-app'); syncData();
+}
+function skipSetup(){
+  D=JSON.parse(JSON.stringify(SAMPLE)); show('main-app'); rAll();
+  toast('Using sample data');
 }
 
-if(SCRIPT_URL) document.getElementById('setup-banner').style.display='none';
-if(document.getElementById('sheet-url-input')) document.getElementById('sheet-url-input').value = SCRIPT_URL;
-
-// ═══════════════════════════════════════════════
-//  SYNC WITH GOOGLE SHEETS
-// ═══════════════════════════════════════════════
+// ── SYNC ──────────────────────────────────────
 async function syncData(){
-  if(!SCRIPT_URL){ showToast('Please set up your Google Sheet first'); return; }
-  const btn = document.getElementById('sync-btn');
-  btn.classList.add('spinning');
-  document.getElementById('sync-status').textContent = 'Syncing…';
-  try {
-    // Use no-cors image trick for Safari file:// compatibility on reads too,
-    // but we need the response — so use a <script> JSONP-style tag instead.
-    const raw = await fetchJSON(SCRIPT_URL + '?action=read');
-    if(raw.Households && raw.Households.length) DATA.households = raw.Households;
-    if(raw.Payments && raw.Payments.length) DATA.payments = raw.Payments;
-    if(raw.Incidents && raw.Incidents.length) DATA.incidents = raw.Incidents;
-    if(raw.Network && raw.Network.length) DATA.network = raw.Network;
-    const now = new Date().toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit'});
-    document.getElementById('sync-status').textContent = 'Synced ' + now;
-    showToast('Data synced from Google Sheet ✓');
-  } catch(err) {
-    document.getElementById('sync-status').textContent = 'Sync failed';
-    showToast('Sync failed — open app via Safari and check URL');
-    console.error('Sync error:', err);
-  }
-  btn.classList.remove('spinning');
-  renderAll();
+  if(!SURL){toast('No Sheet connected');return;}
+  const btn=document.getElementById('sync-btn');
+  btn.classList.add('spinning'); set('ss','Syncing…');
+  try{
+    const res=await fetch(SURL+'?action=read');
+    const j=await res.json();
+    if(j.Households&&j.Households.length) D.households=j.Households;
+    if(j.Payments&&j.Payments.length)     D.payments=j.Payments;
+    if(j.Incidents&&j.Incidents.length)   D.incidents=j.Incidents;
+    if(j.Network&&j.Network.length)       D.network=j.Network;
+    if(j.WodFees&&j.WodFees.length)       D.wodfees=j.WodFees;
+    set('ss','Synced '+new Date().toLocaleTimeString('en-PK',{hour:'2-digit',minute:'2-digit'}));
+    toast('Synced ✓');
+  }catch(e){set('ss','Sync failed');toast('Sync failed — check connection');}
+  btn.classList.remove('spinning'); rAll();
 }
 
-// Fetch JSON — works in both Safari (file://) and served contexts
-function fetchJSON(url){
-  return new Promise((resolve, reject) => {
-    // Try fetch first
-    fetch(url)
-      .then(r => r.json())
-      .then(resolve)
-      .catch(() => {
-        // Fallback: dynamic <script> tag (works cross-origin in Safari)
-        // Apps Script returns JSON not JSONP, so we iframe-fetch it
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = url;
-        iframe.onload = () => {
-          try {
-            const txt = iframe.contentDocument
-              ? iframe.contentDocument.body.innerText
-              : iframe.contentWindow.document.body.innerText;
-            document.body.removeChild(iframe);
-            resolve(JSON.parse(txt));
-          } catch(e){ document.body.removeChild(iframe); reject(e); }
-        };
-        iframe.onerror = () => { document.body.removeChild(iframe); reject(new Error('iframe failed')); };
-        document.body.appendChild(iframe);
-      });
+async function push(sheet,action,row,id){
+  if(!SURL) return {ok:false,error:'No URL'};
+  try{
+    const enc=encodeURIComponent(JSON.stringify(row));
+    let u=SURL+'?action='+action+'&sheet='+encodeURIComponent(sheet)+'&data='+enc;
+    if(id) u+='&id='+encodeURIComponent(String(id));
+    const r=await fetch(u); return await r.json();
+  }catch(e){return {ok:false,error:e.toString()};}
+}
+
+// ── RENDER ────────────────────────────────────
+function rAll(){ rDash(); rHH(); rPay(); rWod(); rInc(); fillDrops(); }
+
+function rDash(){
+  const h=D.households;
+  const tapCol=h.reduce((s,x)=>s+n(x.tapPaid||x['tapPaid']),0);
+  const tapOut=h.reduce((s,x)=>s+n(x.tapOwed||x['tapOwed']),0);
+  const pd=h.filter(x=>(x.status||x.Status)==='Paid').length;
+  const goal=tapCol+tapOut; const pct=goal>0?Math.round(tapCol/goal*100):0;
+  set('d-hh',h.length); set('d-col','PKR '+tapCol.toLocaleString());
+  set('d-out','PKR '+tapOut.toLocaleString());
+  set('d-pc',pd+' of '+h.length+' households paid');
+  set('d-pct',pct+'%');
+  document.getElementById('d-pb').style.width=pct+'%';
+  set('d-gl','Goal: PKR '+goal.toLocaleString());
+
+  const wodCol=h.reduce((s,x)=>s+n(x.wodPaid||x['wodPaid']),0);
+  const wodOut=h.reduce((s,x)=>s+n(x.wodOwed||x['wodOwed']),0);
+  const wodMembers=h.filter(x=>(x.wods||x.Wods||'')).length;
+  set('w-hh',wodMembers); set('w-col','PKR '+wodCol.toLocaleString());
+  set('w-out','PKR '+wodOut.toLocaleString());
+
+  const nl=document.getElementById('net-list');
+  nl.innerHTML=D.network.length?D.network.map(r=>{
+    const s=r.status||r.Status||'';
+    const c=s==='Active'?'paid':s==='Monitor'?'monitor':'overdue';
+    const d=s==='Active'?'g':s==='Monitor'?'a':'r';
+    return `<div class="nr"><div class="dot ${d}"></div><div class="nn">${r.line||r.Line||''}</div><span class="badge ${c}">${s}</span></div>`;
+  }).join(''):'<div class="empty">No network data</div>';
+
+  const rl=document.getElementById('rec-list');
+  const recent=[...D.payments,...D.wodfees].sort((a,b)=>new Date(b.date||b.Date)-new Date(a.date||a.Date)).slice(0,6);
+  rl.innerHTML=recent.length?recent.map(p=>{
+    const isWod=!!(p.wod||p.Wod);
+    const dc=isWod?'b':'g';
+    return `<div class="li"><div class="dot ${dc}"></div>
+    <div class="lb">${p.household||p.Household||''} — <strong>PKR ${n(p.amount||p.Amount).toLocaleString()}</strong>
+    <div class="ls">${isWod?(p.wod||p.Wod||''):''}${isWod?' · ':''}${p.type||p.Type||''} ${p.method||p.Method?'· '+(p.method||p.Method):''}</div></div>
+    <div class="ld">${fd(p.date||p.Date)}</div></div>`;
+  }).join(''):'<div class="empty">No activity yet</div>';
+}
+
+function rHH(){
+  const q=(document.getElementById('hhs').value||'').toLowerCase();
+  const f=document.getElementById('hhf').value;
+  const list=document.getElementById('hh-list');
+  const AC={Paid:['#e0f5ee','#0e7057'],Due:['#fdf0d8','#854F0B'],Overdue:['#fceaea','#c94040'],Partial:['#e8eefb','#3060b8']};
+  const items=D.households.filter(h=>{
+    const nm=(h.name||h.Name||'').toLowerCase();
+    const hs=(h.house||h.House||'').toLowerCase();
+    return(!q||nm.includes(q)||hs.includes(q))&&(!f||(h.status||h.Status||'')===f);
   });
-}
-
-async function pushRow(sheet, action, row, id){
-  if(!SCRIPT_URL) return;
-  const encoded = encodeURIComponent(JSON.stringify(row));
-  let url = SCRIPT_URL + '?action=' + action + '&sheet=' + encodeURIComponent(sheet) + '&data=' + encoded;
-  if(id) url += '&id=' + encodeURIComponent(String(id));
-
-  // Try fetch first; if blocked (Safari local file), fall back to image ping
-  try {
-    const res = await fetch(url);
-    const result = await res.json();
-    if(!result.ok) console.warn('Sheet write issue:', result.error);
-    return result;
-  } catch(fetchErr) {
-    // fetch blocked (e.g. Safari file://) — use no-response image ping instead
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = img.onerror = () => resolve({ok:true});
-      img.src = url;
-      setTimeout(() => resolve({ok:true}), 4000);
-    });
-  }
-}
-
-// ═══════════════════════════════════════════════
-//  RENDER FUNCTIONS
-// ═══════════════════════════════════════════════
-function renderAll(){
-  renderDashboard();
-  renderHouseholds();
-  renderPayments();
-  renderIncidents();
-  populateHHDropdown();
-}
-
-function renderDashboard(){
-  const hh = DATA.households;
-  const total = hh.length;
-  const collected = hh.reduce((s,h)=>s+(Number(h.paid)||0),0);
-  const outstanding = hh.reduce((s,h)=>s+(Number(h.owed)||0),0);
-  const paid = hh.filter(h=>h.status==='Paid').length;
-  const goal = collected + outstanding;
-  const pct = goal>0 ? Math.round(collected/goal*100) : 0;
-
-  document.getElementById('d-households').textContent = total;
-  document.getElementById('d-collected').textContent = 'PKR '+collected.toLocaleString();
-  document.getElementById('d-outstanding').textContent = 'PKR '+outstanding.toLocaleString();
-  document.getElementById('d-paid-count').textContent = paid+' of '+total+' households paid';
-  document.getElementById('d-percent').textContent = pct+'%';
-  document.getElementById('d-progress').style.width = pct+'%';
-  document.getElementById('d-goal-text').textContent = 'Goal: PKR '+goal.toLocaleString();
-
-  // Network
-  const nl = document.getElementById('network-status-list');
-  if(!DATA.network.length){ nl.innerHTML='<div class="empty">No network data</div>'; }
-  else {
-    nl.innerHTML = DATA.network.map(n=>{
-      const cls = n.status==='Active'?'paid':n.status==='Monitor'?'due':'overdue';
-      const dot = n.status==='Active'?'green':n.status==='Monitor'?'amber':'red';
-      return `<div class="net-row">
-        <div class="dot ${dot}"></div>
-        <div class="net-name">${n.line||n.Line||''}</div>
-        <span class="badge ${cls}">${n.status||n.Status||''}</span>
-      </div>`;
+  if(!items.length){list.innerHTML='<div class="empty">No households found</div>';return;}
+  list.innerHTML=items.map(h=>{
+    const nm=h.name||h.Name||'';
+    const st=h.status||h.Status||'Due';
+    const [bg,fg]=AC[st]||['#eee','#333'];
+    const ini=nm.split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    const tapPd=n(h.tapPaid||h['tapPaid']); const tapOw=n(h.tapOwed||h['tapOwed']);
+    const wodPd=n(h.wodPaid||h['wodPaid']); const wodOw=n(h.wodOwed||h['wodOwed']);
+    const tapTot=tapPd+tapOw; const tapPct=tapTot>0?Math.round(tapPd/tapTot*100):0;
+    const tapTypes=(h.tapTypes||h['tapTypes']||'').split(',').filter(Boolean);
+    const wods=(h.wods||h.Wods||'').split(',').filter(Boolean);
+    const typeTags=tapTypes.map(t=>{
+      const cls=t.includes('Residential')?'res':t.includes('Public')?'pub':'biz';
+      return `<span class="type-tag ${cls}">${t}</span>`;
     }).join('');
-  }
-
-  // Recent payments
-  const ra = document.getElementById('recent-activity');
-  const recent = [...(DATA.payments||[])].slice(-5).reverse();
-  if(!recent.length){ ra.innerHTML='<div class="empty">No payments recorded yet</div>'; return; }
-  ra.innerHTML = recent.map(p=>`
-    <div class="log-item">
-      <div class="dot green"></div>
-      <div class="log-body">${p.household||p.Household||''} — PKR ${Number(p.amount||p.Amount||0).toLocaleString()}
-        <div class="log-sub">${p.type||p.Type||''} · ${p.method||p.Method||''}</div>
-      </div>
-      <div class="log-date">${fmtDate(p.date||p.Date||'')}</div>
-    </div>`).join('');
-}
-
-function renderHouseholds(){
-  const search = (document.getElementById('hh-search').value||'').toLowerCase();
-  const filter = document.getElementById('hh-filter').value;
-  const list = document.getElementById('households-list');
-  let hhs = DATA.households.filter(h=>{
-    const n = (h.name||h.Name||'').toLowerCase();
-    const no = (h.house||h.House||'').toLowerCase();
-    const matchSearch = !search || n.includes(search) || no.includes(search);
-    const matchFilter = !filter || (h.status||h.Status||'')===filter;
-    return matchSearch && matchFilter;
-  });
-  if(!hhs.length){ list.innerHTML='<div class="empty">No households found</div>'; return; }
-  list.innerHTML = hhs.map(h=>{
-    const name = h.name||h.Name||'';
-    const initials = name.split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    const status = h.status||h.Status||'Due';
-    const statusCls = status.toLowerCase().replace(' ','');
-    const avatarColors = {Paid:['#E1F5EE','#0F6E56'],Due:['#FAEEDA','#854F0B'],Overdue:['#FCEBEB','#A32D2D'],Partial:['#E6F1FB','#185FA5']};
-    const [bg,fg] = avatarColors[status]||['#eee','#333'];
-    const paid = Number(h.paid||h.Paid||0);
-    const owed = Number(h.owed||h.Owed||0);
-    const total = paid + owed;
-    const pct = total>0?Math.round(paid/total*100):0;
-    return `<div class="card" onclick="openPayModal('${h.id||h.ID||name}','${name}',${owed})">
-      <div class="hh-row">
-        <div class="avatar" style="background:${bg};color:${fg}">${initials}</div>
-        <div style="flex:1">
-          <div class="hh-row"><span class="hh-name">${name}</span><span class="badge ${statusCls}">${status}</span></div>
-          <div class="hh-meta">${h.house||h.House||''} · ${h.connections||h.Connections||1} connection(s) · PKR ${paid.toLocaleString()} / ${total.toLocaleString()}</div>
-          ${status==='Partial'?`<div class="progress-bar" style="max-width:140px"><div class="progress-fill amber" style="width:${pct}%"></div></div>`:''}
+    const wodTags=wods.map(w=>`<span class="type-tag wod">🌊 ${w}</span>`).join('');
+    return `<div class="card tap" onclick="openQP('${nm.replace(/'/g,"\\'")}',${tapOw})">
+      <div class="hrow">
+        <div class="av" style="background:${bg};color:${fg}">${ini}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px"><span class="hn">${nm}</span><span class="badge ${st.toLowerCase()}">${st}</span></div>
+          <div class="hm">${h.house||h.House||''}</div>
+          <div class="type-tags">${typeTags}${wodTags}</div>
+          <div style="margin-top:6px;font-size:12px;color:var(--mu)">
+            💧 PKR ${tapPd.toLocaleString()} / ${tapTot.toLocaleString()}
+            ${wods.length?` &nbsp;🌊 PKR ${wodPd.toLocaleString()} / ${(wodPd+wodOw).toLocaleString()}`:''}
+          </div>
+          ${st==='Partial'?`<div class="prog" style="max-width:140px"><div class="pf am" style="width:${tapPct}%"></div></div>`:''}
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-function renderPayments(){
-  const list = document.getElementById('payments-list');
-  const payments = [...(DATA.payments||[])].reverse();
-  if(!payments.length){ list.innerHTML='<div class="empty">No payments recorded yet</div>'; return; }
-  list.innerHTML = payments.map(p=>`
-    <div class="log-item">
-      <div class="dot green"></div>
-      <div class="log-body">
-        <strong>${p.household||p.Household||''}</strong> — PKR ${Number(p.amount||p.Amount||0).toLocaleString()}
-        <div class="log-sub">${p.type||p.Type||''} · ${p.method||p.Method||''} · by ${p.by||p.By||'—'}</div>
-        ${p.notes||p.Notes?`<div class="log-sub">${p.notes||p.Notes}</div>`:''}
-      </div>
-      <div class="log-date">${fmtDate(p.date||p.Date||'')}</div>
-    </div>`).join('');
+function rPay(){
+  const list=document.getElementById('pay-list');
+  const pays=[...D.payments].reverse();
+  list.innerHTML=pays.length?pays.map(p=>`
+    <div class="li"><div class="dot g"></div>
+    <div class="lb"><strong>${p.household||p.Household||''}</strong> — PKR ${n(p.amount||p.Amount).toLocaleString()}
+    <div class="ls">${p.type||p.Type||''} · ${p.method||p.Method||''} · by ${p.by||p.By||'—'}</div></div>
+    <div class="ld">${fd(p.date||p.Date)}</div></div>`).join('')
+  :'<div class="empty">No tap water payments yet</div>';
+
+  const wlist=document.getElementById('wod-pay-list');
+  const wpays=[...D.wodfees].reverse();
+  wlist.innerHTML=wpays.length?wpays.map(p=>`
+    <div class="li"><div class="dot b"></div>
+    <div class="lb"><strong>${p.household||p.Household||''}</strong> — PKR ${n(p.amount||p.Amount).toLocaleString()}
+    <div class="ls">${p.wod||p.Wod||''} · ${p.method||p.Method||''} · by ${p.by||p.By||'—'}</div></div>
+    <div class="ld">${fd(p.date||p.Date)}</div></div>`).join('')
+  :'<div class="empty">No wod payments yet</div>';
 }
 
-function renderIncidents(){
-  const open = DATA.incidents.filter(i=>(i.status||i.Status||'')!=='Resolved');
-  const resolved = DATA.incidents.filter(i=>(i.status||i.Status||'')==='Resolved');
-  const renderList = (items, el) => {
-    if(!items.length){ document.getElementById(el).innerHTML='<div class="empty">None</div>'; return; }
-    document.getElementById(el).innerHTML = items.map(i=>`
+function rWod(){
+  const list=document.getElementById('wod-hh-list');
+  const members=D.households.filter(h=>(h.wods||h.Wods||'').trim());
+  if(!members.length){list.innerHTML='<div class="empty">No households enrolled in irrigation Wods yet</div>';return;}
+  list.innerHTML=members.map(h=>{
+    const nm=h.name||h.Name||'';
+    const wods=(h.wods||h.Wods||'').split(',').filter(Boolean);
+    const wodPd=n(h.wodPaid||h['wodPaid']); const wodOw=n(h.wodOwed||h['wodOwed']);
+    const status=wodOw<=0?'paid':wodPd>0?'partial':'due';
+    return `<div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+        <span style="font-weight:700;font-size:14px">${nm}</span>
+        <span class="badge ${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span>
+      </div>
+      <div class="type-tags">${wods.map(w=>`<span class="badge wod">🌊 ${w}</span>`).join('')}</div>
+      <div style="font-size:12px;color:var(--mu);margin-top:7px">PKR ${wodPd.toLocaleString()} paid · PKR ${wodOw.toLocaleString()} outstanding</div>
+    </div>`;
+  }).join('');
+}
+
+function rInc(){
+  const open=D.incidents.filter(i=>(i.status||i.Status||'')!=='Resolved');
+  const res=D.incidents.filter(i=>(i.status||i.Status||'')==='Resolved');
+  const mk=(items,el,empty)=>{
+    document.getElementById(el).innerHTML=items.length?items.map(i=>`
       <div class="card">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
           <span class="badge ${(i.status||'open').toLowerCase()==='open'?'open':'resolved'}">${i.status||i.Status||'Open'}</span>
-          <span style="font-size:14px;font-weight:600;flex:1">${i.title||i.Title||''}</span>
-          <span style="font-size:11px;color:var(--faint)">${fmtDate(i.date||i.Date||'')}</span>
+          <span style="font-size:14px;font-weight:700;flex:1">${i.title||i.Title||''}</span>
+          <span style="font-size:11px;color:var(--fa)">${fd(i.date||i.Date)}</span>
         </div>
-        <div style="font-size:12px;color:var(--muted)">📍 ${i.location||i.Location||''} · ${i.affected||i.Affected||0} households affected</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px">${i.details||i.Details||''}</div>
-        ${(i.status||i.Status||'')!=='Resolved'?`<div style="margin-top:10px"><button class="btn" style="font-size:12px;padding:6px 12px" onclick="resolveIncident('${i.id||i.ID||i.title||i.Title||''}')">Mark resolved</button></div>`:''}
-      </div>`).join('');
+        <div style="font-size:12px;color:var(--mu)">📍 ${i.location||i.Location||''} · ${i.affected||i.Affected||0} households</div>
+        <div style="font-size:12px;color:var(--mu);margin-top:4px">${i.details||i.Details||''}</div>
+        ${(i.status||i.Status||'')!=='Resolved'?`<div style="margin-top:10px"><button class="btn" style="font-size:12px;padding:7px 14px" onclick="resInc('${i.id||i.ID||''}')">Mark resolved</button></div>`:''}
+      </div>`).join(''):`<div class="empty">${empty}</div>`;
   };
-  renderList(open,'incidents-open');
-  renderList(resolved,'incidents-resolved');
+  mk(open,'inc-open','No open incidents ✓');
+  mk(res,'inc-res','No resolved incidents yet');
 }
 
-function populateHHDropdown(){
-  const sel = document.getElementById('rec-household');
-  const current = sel.value;
-  sel.innerHTML = '<option value="">Select household…</option>' +
-    DATA.households.map(h=>`<option value="${h.name||h.Name||''}">${h.name||h.Name||''} (${h.house||h.House||''})</option>`).join('');
-  sel.value = current;
+function fillDrops(){
+  const hhs=D.households.map(h=>`<option value="${h.name||h.Name||''}">${h.name||h.Name||''} (${h.house||h.House||''})</option>`).join('');
+  ['r-hh','rw-hh','mw-hh'].forEach(id=>{
+    const s=document.getElementById(id); if(!s)return;
+    const v=s.value;
+    s.innerHTML='<option value="">Select household…</option>'+hhs;
+    s.value=v;
+  });
 }
 
-// ═══════════════════════════════════════════════
-//  ACTIONS
-// ═══════════════════════════════════════════════
-async function submitPayment(){
-  const household = document.getElementById('rec-household').value;
-  const amount = document.getElementById('rec-amount').value;
-  const date = document.getElementById('rec-date').value;
-  const type = document.getElementById('rec-type').value;
-  const method = document.getElementById('rec-method').value;
-  const notes = document.getElementById('rec-notes').value;
-  const by = document.getElementById('rec-by').value;
-  if(!household||!amount||!date){ showToast('Please fill in household, amount and date'); return; }
-  const row = {date,household,amount:Number(amount),type,method,notes,by};
-  DATA.payments.push(row);
-  // Update household status locally
-  const hh = DATA.households.find(h=>(h.name||h.Name||'')=== household);
-  if(hh){ hh.paid=(Number(hh.paid||0)+Number(amount)); hh.owed=Math.max(0,(Number(hh.owed||0)-Number(amount))); if(hh.owed<=0)hh.status='Paid'; else hh.status='Partial'; }
-  await pushRow('Payments','append',row);
-  showToast('Payment saved! ✓');
-  clearForm();
-  renderAll();
+// ── FEE CALCULATOR ────────────────────────────
+function toggleCheck(label, type){
+  const cb=label.querySelector('input[type=checkbox]');
+  if(cb.checked) label.classList.add(type==='wod'?'wod-checked':'checked');
+  else label.classList.remove('checked','wod-checked');
 }
 
-async function submitAddHH(){
-  const name = document.getElementById('m-name').value.trim();
-  const house = document.getElementById('m-house').value.trim();
-  const conn = Number(document.getElementById('m-conn').value)||1;
-  const type = document.getElementById('m-type').value;
-  const phone = document.getElementById('m-phone').value.trim();
-  if(!name||!house){ showToast('Name and house number required'); return; }
-  const annualFee = type==='Business / Hotel'?3000:conn*1200;
-  const id = 'H'+(Date.now()+'').slice(-6);
-  const row = {id,name,house,connections:conn,type,phone,status:'Due',paid:0,owed:annualFee};
-  DATA.households.push(row);
-  await pushRow('Households','append',row);
-  showToast('Household added!');
-  closeModals();
-  renderAll();
+function calcFee(){
+  const tapChecks=[...document.querySelectorAll('#tap-checks input:checked')].map(x=>x.value);
+  const wodChecks=[...document.querySelectorAll('#wod-checks input:checked')].map(x=>x.value);
+  const tapFee=tapChecks.reduce((s,t)=>s+(TAP_FEES[t]||0),0);
+  const wodFee=wodChecks.reduce((s,w)=>s+(WOD_FEES[w]||0),0);
+  const total=tapFee+wodFee;
+  const summary=document.getElementById('fee-summary');
+  const lines=document.getElementById('fee-lines');
+  if(tapChecks.length===0&&wodChecks.length===0){summary.style.display='none';return;}
+  summary.style.display='block';
+  let html='';
+  tapChecks.forEach(t=>{if(TAP_FEES[t]>0) html+=`<div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--mu)"><span>💧 ${t}</span><span>PKR ${(TAP_FEES[t]||0).toLocaleString()}</span></div>`;});
+  if(tapChecks.some(t=>t==='Public point')) html+=`<div style="font-size:11px;color:var(--fa);padding:2px 0">💧 Public point — fee set by committee</div>`;
+  wodChecks.forEach(w=>html+=`<div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--mu)"><span>🌊 ${w}</span><span>PKR ${(WOD_FEES[w]||0).toLocaleString()}</span></div>`);
+  lines.innerHTML=html;
+  set('fee-total','PKR '+total.toLocaleString());
 }
 
-async function submitIncident(){
-  const title = document.getElementById('i-title').value.trim();
-  const type = document.getElementById('i-type').value;
-  const location = document.getElementById('i-loc').value.trim();
-  const affected = document.getElementById('i-affected').value||0;
-  const details = document.getElementById('i-details').value.trim();
-  if(!title){ showToast('Please enter a title'); return; }
-  const id = 'I'+(Date.now()+'').slice(-6);
-  const date = new Date().toISOString().slice(0,10);
-  const row = {id,date,title,type,location,affected:Number(affected),status:'Open',details};
-  DATA.incidents.push(row);
-  await pushRow('Incidents','append',row);
-  showToast('Incident logged!');
-  closeModals();
-  renderIncidents();
+// ── ACTIONS ───────────────────────────────────
+async function subHH(){
+  const nm=g('m-nm').trim(), hs=g('m-hs').trim();
+  if(!nm||!hs){toast('Name and house number required');return;}
+  const tapTypes=[...document.querySelectorAll('#tap-checks input:checked')].map(x=>x.value);
+  const wods=[...document.querySelectorAll('#wod-checks input:checked')].map(x=>x.value);
+  if(tapTypes.length===0&&wods.length===0){toast('Select at least one connection type or Wod');return;}
+  const tapFee=tapTypes.reduce((s,t)=>s+(TAP_FEES[t]||0),0);
+  const wodFee=wods.reduce((s,w)=>s+(WOD_FEES[w]||0),0);
+  const id='H'+Date.now().toString().slice(-6);
+  const row={id,name:nm,house:hs,phone:g('m-ph'),tapTypes:tapTypes.join(','),wods:wods.join(','),status:'Due',tapPaid:0,tapOwed:tapFee,wodPaid:0,wodOwed:wodFee};
+  D.households.push(row); cm(); rAll(); toast('Saving…');
+  const r=await push('Households','append',row);
+  toast(r&&r.ok?'Household saved ✓':'Error: '+(r&&r.error||'unknown'));
+  // reset checkboxes
+  document.querySelectorAll('#tap-checks input,#wod-checks input').forEach(cb=>{cb.checked=false;cb.closest('.check-item').classList.remove('checked','wod-checked');});
+  document.getElementById('fee-summary').style.display='none';
+  document.getElementById('m-nm').value=''; document.getElementById('m-hs').value=''; document.getElementById('m-ph').value='';
 }
 
-async function resolveIncident(id){
-  const inc = DATA.incidents.find(i=>(i.id||i.ID||i.title||i.Title||'')=== id);
-  if(inc){ inc.status='Resolved'; await pushRow('Incidents','update',{status:'Resolved'},id); }
-  renderIncidents();
-  showToast('Incident marked as resolved ✓');
+async function subPay(){
+  const hh=g('r-hh'),amt=g('r-amt'),dt=g('r-dt');
+  if(!hh||!amt||!dt){toast('Fill in household, amount and date');return;}
+  const row={date:dt,household:hh,amount:Number(amt),type:g('r-tp'),method:g('r-mt'),notes:g('r-nt'),by:g('r-by')};
+  D.payments.push(row);
+  const h=D.households.find(x=>(x.name||x.Name||'')===hh);
+  if(h){h.tapPaid=n(h.tapPaid)+Number(amt);h.tapOwed=Math.max(0,n(h.tapOwed)-Number(amt));h.status=h.tapOwed<=0?'Paid':'Partial';}
+  rAll(); clrRec(); toast('Saving…');
+  const r=await push('Payments','append',row);
+  toast(r&&r.ok?'Payment saved ✓':'Error: '+(r&&r.error||'unknown'));
 }
 
-// ── Quick-pay modal ──
-let _payModal = null;
-function openPayModal(id,name,owed){
-  const html = `<div class="modal-overlay" id="pay-modal">
-    <div class="modal-box">
-      <div class="modal-title">Quick payment</div>
-      <div style="font-size:14px;font-weight:600;margin-bottom:12px">${name}</div>
-      <div class="form-group"><label>Amount (PKR)</label><input type="number" id="qp-amount" value="${owed||1200}" min="0"></div>
-      <div class="form-group"><label>Method</label><select id="qp-method"><option>Cash</option><option>EasyPaisa</option><option>JazzCash</option><option>Bank transfer</option></select></div>
-      <div class="form-group"><label>Received by</label><input type="text" id="qp-by" placeholder="Committee member name"></div>
-      <div class="btn-row">
-        <button class="btn primary" style="flex:1" onclick="submitQuickPay('${name}')">Save payment</button>
-        <button class="btn" onclick="document.getElementById('pay-modal').remove()">Cancel</button>
-      </div>
-    </div>
-  </div>`;
-  document.body.insertAdjacentHTML('beforeend',html);
+async function subWodPay(){
+  const hh=g('rw-hh'),wod=g('rw-wod'),amt=g('rw-amt'),dt=g('rw-dt');
+  if(!hh||!wod||!amt){toast('Fill in household, Wod, and amount');return;}
+  const row={date:dt,household:hh,wod,amount:Number(amt),method:g('rw-mt'),by:g('rw-by')};
+  D.wodfees.push(row);
+  const h=D.households.find(x=>(x.name||x.Name||'')===hh);
+  if(h){h.wodPaid=n(h.wodPaid)+Number(amt);h.wodOwed=Math.max(0,n(h.wodOwed)-Number(amt));}
+  rAll(); clrWodRec(); toast('Saving…');
+  const r=await push('WodFees','append',row);
+  toast(r&&r.ok?'Wod payment saved ✓':'Error: '+(r&&r.error||'unknown'));
 }
 
-async function submitQuickPay(name){
-  const amount = Number(document.getElementById('qp-amount').value);
-  const method = document.getElementById('qp-method').value;
-  const by = document.getElementById('qp-by').value;
-  const date = new Date().toISOString().slice(0,10);
-  const row = {date,household:name,amount,type:'Annual — full',method,notes:'',by};
-  DATA.payments.push(row);
-  const hh = DATA.households.find(h=>(h.name||h.Name||'')=== name);
-  if(hh){ hh.paid=(Number(hh.paid||0)+amount); hh.owed=Math.max(0,(Number(hh.owed||0)-amount)); if(hh.owed<=0)hh.status='Paid'; else hh.status='Partial'; }
-  await pushRow('Payments','append',row);
-  document.getElementById('pay-modal').remove();
-  showToast('Payment saved ✓');
-  renderAll();
+async function subWodPayModal(){
+  const hh=g('mw-hh'),wod=g('mw-wod'),amt=g('mw-amt');
+  if(!hh||!wod||!amt){toast('Fill in all fields');return;}
+  const row={date:td(),household:hh,wod,amount:Number(amt),method:g('mw-mt'),by:g('mw-by')};
+  D.wodfees.push(row);
+  const h=D.households.find(x=>(x.name||x.Name||'')===hh);
+  if(h){h.wodPaid=n(h.wodPaid)+Number(amt);h.wodOwed=Math.max(0,n(h.wodOwed)-Number(amt));}
+  cm(); rAll(); toast('Saving…');
+  const r=await push('WodFees','append',row);
+  toast(r&&r.ok?'Wod payment saved ✓':'Save failed');
 }
 
-// ═══════════════════════════════════════════════
-//  UI HELPERS
-// ═══════════════════════════════════════════════
-function switchTab(t){
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+async function subInc(){
+  const tt=g('i-tt').trim();
+  if(!tt){toast('Please enter a title');return;}
+  const id='I'+Date.now().toString().slice(-6);
+  const row={id,date:td(),title:tt,type:g('i-ty'),location:g('i-lo'),affected:Number(g('i-af'))||0,status:'Open',details:g('i-dt')};
+  D.incidents.push(row); cm(); rInc(); toast('Saving…');
+  const r=await push('Incidents','append',row);
+  toast(r&&r.ok?'Incident saved ✓':'Error: '+(r&&r.error||'unknown'));
+}
+
+async function resInc(id){
+  const i=D.incidents.find(x=>(x.id||x.ID||'')===id);
+  if(i){i.status='Resolved';rInc();toast('Updating…');
+    const r=await push('Incidents','update',{status:'Resolved'},id);
+    toast(r&&r.ok?'Resolved ✓':'Update failed');
+  }
+}
+
+function openQP(name,owed){
+  QPN=name;
+  document.getElementById('qp-t').textContent='Payment: '+name;
+  document.getElementById('qp-a').value=owed||1200;
+  document.getElementById('qp-b').value='';
+  om('m-qp');
+}
+
+async function subQP(){
+  const amt=Number(document.getElementById('qp-a').value);
+  const row={date:td(),household:QPN,amount:amt,type:'Annual — full',method:document.getElementById('qp-m').value,notes:'',by:document.getElementById('qp-b').value};
+  D.payments.push(row);
+  const h=D.households.find(x=>(x.name||x.Name||'')===QPN);
+  if(h){h.tapPaid=n(h.tapPaid)+amt;h.tapOwed=Math.max(0,n(h.tapOwed)-amt);h.status=h.tapOwed<=0?'Paid':'Partial';}
+  cm(); rAll(); toast('Saving…');
+  const r=await push('Payments','append',row);
+  toast(r&&r.ok?'Payment saved ✓':'Save failed');
+}
+
+// ── UI HELPERS ────────────────────────────────
+function payTab(v,btn){
+  _payView=v;
+  document.querySelectorAll('#pay-pills .pill').forEach(p=>p.classList.remove('active','water-active'));
+  btn.classList.add(v==='wod'?'water-active':'active');
+  document.getElementById('pay-tap-view').style.display=v==='tap'?'block':'none';
+  document.getElementById('pay-wod-view').style.display=v==='wod'?'block':'none';
+}
+function recTab(v,btn){
+  _recView=v;
+  document.querySelectorAll('#rec-pills .pill').forEach(p=>p.classList.remove('active','water-active'));
+  btn.classList.add(v==='wod'?'water-active':'active');
+  document.getElementById('rec-tap-view').style.display=v==='tap'?'block':'none';
+  document.getElementById('rec-wod-view').style.display=v==='wod'?'block':'none';
+}
+
+const n=v=>Number(v)||0;
+const g=id=>{const e=document.getElementById(id);return e?e.value:'';};
+const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+const td=()=>new Date().toISOString().slice(0,10);
+const show=id=>{['setup-screen','main-app'].forEach(s=>document.getElementById(s).style.display='none');document.getElementById(id).style.display='block';};
+
+function fd(d){if(!d)return'';try{return new Date(d).toLocaleDateString('en-PK',{day:'numeric',month:'short'});}catch(e){return String(d);}}
+
+function tab(t,btn){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  if(btn)btn.classList.add('active');
   document.getElementById('panel-'+t).classList.add('active');
 }
+function om(id){document.getElementById(id).style.display='flex';}
+function cm(){document.querySelectorAll('.mo').forEach(m=>m.style.display='none');}
+function bgClose(e,id){if(e.target===document.getElementById(id))cm();}
 
-function openAddHHModal(){ document.getElementById('add-hh-modal').style.display='flex'; }
-function openIncidentModal(){ document.getElementById('incident-modal').style.display='flex'; }
-function closeModals(){
-  document.getElementById('add-hh-modal').style.display='none';
-  document.getElementById('incident-modal').style.display='none';
-}
+function clrRec(){['r-hh','r-amt','r-nt','r-by'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('r-dt').value=td();}
+function clrWodRec(){['rw-hh','rw-wod','rw-amt','rw-by'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('rw-dt').value=td();}
 
-function clearForm(){
-  ['rec-household','rec-amount','rec-date','rec-notes','rec-by'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value='';
-  });
-  document.getElementById('rec-date').value=new Date().toISOString().slice(0,10);
-}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);}
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2800);
-}
-
-function fmtDate(d){
-  if(!d) return '';
-  try{ return new Date(d).toLocaleDateString('en-PK',{day:'numeric',month:'short'}); }
-  catch(e){ return d; }
-}
-
-// ═══════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════
-document.getElementById('rec-date').value = new Date().toISOString().slice(0,10);
-renderAll();
+init();
 </script>
 </body>
 </html>
