@@ -513,6 +513,46 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
+
+<!-- ── EDIT HOUSEHOLD MODAL ── -->
+<div class="mo" id="m-edit" style="display:none" onclick="bgClose(event,'m-edit')">
+  <div class="mb">
+    <div class="mhandle"></div>
+    <div class="mt">Edit household <span style="direction:rtl;font-size:13px;font-weight:400;color:var(--mu)">تدوین</span></div>
+    <input type="hidden" id="edit-id">
+    <div class="mg"><label>Full name</label><input class="inp" type="text" id="edit-nm" style="margin:0"></div>
+    <div class="two">
+      <div class="mg"><label>House / Unit no.</label><input class="inp" type="text" id="edit-hs" style="margin:0"></div>
+      <div class="mg"><label>Phone</label><input class="inp" type="tel" id="edit-ph" placeholder="03xx-xxxxxxx" inputmode="tel" style="margin:0"></div>
+    </div>
+    <div class="sdiv"><svg class="sdiv-icon" viewBox="0 0 24 24"><path d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z"/></svg><span class="sdiv-label">Tap water connections</span><div class="sdiv-line"></div></div>
+    <div class="mg">
+      <label>Select all that apply</label>
+      <div class="check-group" id="edit-tap-checks">
+        <label class="check-item" onclick="toggleEditCheck(this,'tap')"><input type="checkbox" value="Residential"> <span class="ci-label">Residential</span><span class="ci-fee">PKR 1,200/yr</span></label>
+        <label class="check-item" onclick="toggleEditCheck(this,'tap')"><input type="checkbox" value="Business / Hotel"> <span class="ci-label">Business / Hotel</span><span class="ci-fee">PKR 3,000/yr</span></label>
+        <label class="check-item" onclick="toggleEditCheck(this,'tap')"><input type="checkbox" value="Restaurant"> <span class="ci-label">Restaurant</span><span class="ci-fee">PKR 3,000/yr</span></label>
+        <label class="check-item" onclick="toggleEditCheck(this,'tap')"><input type="checkbox" value="Public point"> <span class="ci-label">Public point</span><span class="ci-fee">Committee fee</span></label>
+      </div>
+    </div>
+    <div class="sdiv"><svg class="sdiv-icon water" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><span class="sdiv-label">Irrigation Wod memberships</span><div class="sdiv-line"></div></div>
+    <div class="mg">
+      <label>Select Wods used</label>
+      <div class="check-group" id="edit-wod-checks">
+        <label class="check-item" onclick="toggleEditCheck(this,'wod')"><input type="checkbox" value="Chamangul Lup Wod"> <span class="ci-label">Chamangul Lup Wod</span><span class="ci-fee">PKR 800/yr</span></label>
+        <label class="check-item" onclick="toggleEditCheck(this,'wod')"><input type="checkbox" value="Dalgiram Lup Wod"> <span class="ci-label">Dalgiram Lup Wod</span><span class="ci-fee">PKR 800/yr</span></label>
+        <label class="check-item" onclick="toggleEditCheck(this,'wod')"><input type="checkbox" value="Wod 3 (placeholder)"> <span class="ci-label">Wod 3 (placeholder)</span><span class="ci-fee">PKR 800/yr</span></label>
+        <label class="check-item" onclick="toggleEditCheck(this,'wod')"><input type="checkbox" value="Wod 4 (placeholder)"> <span class="ci-label">Wod 4 (placeholder)</span><span class="ci-fee">PKR 800/yr</span></label>
+      </div>
+    </div>
+    <div class="hint green" id="edit-fee-note" style="display:none"></div>
+    <div class="brow">
+      <button class="btn p" style="flex:1" onclick="submitEdit()">Save changes</button>
+      <button class="btn" onclick="cm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -679,6 +719,13 @@ function rHH(){
           ${st==='Partial'?`<div class="prog" style="max-width:140px"><div class="pf am" style="width:${tapPct}%"></div></div>`:''}
         </div>
       </div>
+      <div style="display:flex;justify-content:flex-end;gap:6px;margin-top:10px;padding-top:8px;border-top:1px solid #f0f2f5">
+        <button class="edit-btn" onclick="event.stopPropagation();openEdit(${JSON.stringify(h)})">✏️ Edit</button>
+        <button class="wa-btn" onclick="event.stopPropagation();sendWaReceipt('${nm.replace(/'/g,"\'")}','${(h.house||h.House||'').replace(/'/g,"\'")}',${tapOw},${wodOw},'${(h.phone||h.Phone||'').replace(/'/g,"\'")}')">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Send receipt
+        </button>
+      </div>
     </div>`;
   }).join('');
 }
@@ -807,7 +854,16 @@ async function subPay(){
   if(h){h.tapPaid=n(h.tapPaid)+Number(amt);h.tapOwed=Math.max(0,n(h.tapOwed)-Number(amt));h.status=h.tapOwed<=0?'Paid':'Partial';}
   rAll(); clrRec(); toast('Saving…');
   const r=await push('Payments','append',row);
-  toast(r&&r.ok?'Payment saved ✓':'Error: '+(r&&r.error||'unknown'));
+  if(r&&r.ok){
+    toast('Payment saved ✓');
+    const hh=D.households.find(x=>(x.name||x.Name||'')===row.household);
+    if(hh&&(hh.phone||hh.Phone)){
+      setTimeout(()=>{
+        if(confirm('Send WhatsApp receipt to '+row.household+'?'))
+          sendPaymentReceipt(row.household,hh.house||hh.House||'',row.amount,row.method,hh.phone||hh.Phone||'');
+      },600);
+    }
+  } else { toast('Error: '+(r&&r.error||'unknown')); }
 }
 
 async function subWodPay(){
@@ -868,7 +924,16 @@ async function subQP(){
   if(h){h.tapPaid=n(h.tapPaid)+amt;h.tapOwed=Math.max(0,n(h.tapOwed)-amt);h.status=h.tapOwed<=0?'Paid':'Partial';}
   cm(); rAll(); toast('Saving…');
   const r=await push('Payments','append',row);
-  toast(r&&r.ok?'Payment saved ✓':'Save failed');
+  if(r&&r.ok){
+    toast('Payment saved ✓');
+    const hh=D.households.find(x=>(x.name||x.Name||'')===QPN);
+    if(hh&&(hh.phone||hh.Phone)){
+      setTimeout(()=>{
+        if(confirm('Send WhatsApp receipt to '+QPN+'?'))
+          sendPaymentReceipt(QPN,hh.house||hh.House||'',row.amount,row.method,hh.phone||hh.Phone||'');
+      },600);
+    }
+  } else { toast('Save failed'); }
 }
 
 // ── UI HELPERS ────────────────────────────────
@@ -909,6 +974,123 @@ function clrRec(){['r-hh','r-amt','r-nt','r-by'].forEach(id=>{const e=document.g
 function clrWodRec(){['rw-hh','rw-wod','rw-amt','rw-by'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('rw-dt').value=td();}
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);}
+
+
+
+// ── WHATSAPP RECEIPT ──────────────────────────
+function sendWaReceipt(name, house, tapOwed, wodOwed, phone){
+  if(!phone){
+    toast('No phone number saved for this household. Edit to add one.');
+    return;
+  }
+  const date = new Date().toLocaleDateString('en-PK',{day:'numeric',month:'long',year:'numeric'});
+  const tapLine = tapOwed>0 ? `💧 Tap water outstanding: PKR ${Number(tapOwed).toLocaleString()}` : `💧 Tap water: ✅ Paid`;
+  const wodLine = wodOwed>0 ? `🌊 Irrigation Wod outstanding: PKR ${Number(wodOwed).toLocaleString()}` : '';
+  const msg = `*WOD SAR — گلمت واٹر کمیٹی*
+
+` +
+    `السلام علیکم ${name},
+
+` +
+    `📋 Fee status update — ${date}
+` +
+    `🏠 ${house}
+
+` +
+    `${tapLine}
+${wodLine}
+
+` +
+    `برائے کرم جلد از جلد ادائیگی کریں۔
+شکریہ — Gulmit Water Committee`;
+  const clean = phone.replace(/[^0-9]/g,'');
+  const intl = clean.startsWith('0') ? '92' + clean.slice(1) : clean;
+  const url = `https://wa.me/${intl}?text=${encodeURIComponent(msg)}`;
+  window.open(url,'_blank');
+}
+
+function sendPaymentReceipt(name, house, amount, method, phone){
+  if(!phone){ toast('No phone number saved for this household.'); return; }
+  const date = new Date().toLocaleDateString('en-PK',{day:'numeric',month:'long',year:'numeric'});
+  const msg = `*WOD SAR — گلمت واٹر کمیٹی*
+
+` +
+    `✅ *Payment received — رسید*
+
+` +
+    `👤 ${name}
+🏠 ${house}
+💰 PKR ${Number(amount).toLocaleString()}
+💳 ${method}
+📅 ${date}
+
+` +
+    `شکریہ — آپ کی ادائیگی موصول ہو گئی۔
+Gulmit Water Committee`;
+  const clean = phone.replace(/[^0-9]/g,'');
+  const intl = clean.startsWith('0') ? '92' + clean.slice(1) : clean;
+  window.open(`https://wa.me/${intl}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ── EDIT HOUSEHOLD ────────────────────────────
+function openEdit(h){
+  document.getElementById('edit-id').value = h.id||h.ID||'';
+  document.getElementById('edit-nm').value = h.name||h.Name||'';
+  document.getElementById('edit-hs').value = h.house||h.House||'';
+  document.getElementById('edit-ph').value = h.phone||h.Phone||'';
+  const tapTypes = (h.tapTypes||h['tapTypes']||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const wods = (h.wods||h.Wods||'').split(',').map(s=>s.trim()).filter(Boolean);
+  document.querySelectorAll('#edit-tap-checks input').forEach(cb=>{
+    cb.checked = tapTypes.includes(cb.value);
+    cb.closest('.check-item').classList.toggle('checked', cb.checked);
+  });
+  document.querySelectorAll('#edit-wod-checks input').forEach(cb=>{
+    cb.checked = wods.includes(cb.value);
+    cb.closest('.check-item').classList.toggle('wod-checked', cb.checked);
+  });
+  updateEditFeeNote(tapTypes, wods, h);
+  om('m-edit');
+}
+
+function toggleEditCheck(label, type){
+  const cb=label.querySelector('input[type=checkbox]');
+  label.classList.toggle(type==='wod'?'wod-checked':'checked', cb.checked);
+}
+
+function updateEditFeeNote(tapTypes, wods, h){
+  const note = document.getElementById('edit-fee-note');
+  const newTapFee = tapTypes.reduce((s,t)=>s+(TAP_FEES[t]||0),0);
+  const newWodFee = wods.reduce((s,w)=>s+(WOD_FEES[w]||0),0);
+  note.style.display = 'block';
+  note.textContent = `New annual fee: PKR ${(newTapFee+newWodFee).toLocaleString()} (tap: ${newTapFee.toLocaleString()} + wod: ${newWodFee.toLocaleString()})`;
+}
+
+async function submitEdit(){
+  const id = document.getElementById('edit-id').value;
+  const nm = document.getElementById('edit-nm').value.trim();
+  const hs = document.getElementById('edit-hs').value.trim();
+  const ph = document.getElementById('edit-ph').value.trim();
+  if(!nm||!hs){toast('Name and house number required');return;}
+  const tapTypes=[...document.querySelectorAll('#edit-tap-checks input:checked')].map(x=>x.value);
+  const wods=[...document.querySelectorAll('#edit-wod-checks input:checked')].map(x=>x.value);
+  const newTapFee=tapTypes.reduce((s,t)=>s+(TAP_FEES[t]||0),0);
+  const newWodFee=wods.reduce((s,w)=>s+(WOD_FEES[w]||0),0);
+  const h=D.households.find(x=>(x.id||x.ID||'')=== id||(x.name||x.Name||'')===nm);
+  if(h){
+    h.name=nm; h.house=hs; h.phone=ph;
+    h.tapTypes=tapTypes.join(','); h.wods=wods.join(',');
+    // Recalculate owed based on new fee minus what's already paid
+    h.tapOwed=Math.max(0,newTapFee-n(h.tapPaid));
+    h.wodOwed=Math.max(0,newWodFee-n(h.wodPaid));
+    if(h.tapOwed<=0&&h.wodOwed<=0) h.status='Paid';
+    else if(n(h.tapPaid)>0||n(h.wodPaid)>0) h.status='Partial';
+    else h.status='Due';
+  }
+  cm(); rAll(); toast('Saving changes…');
+  const updates={name:nm,house:hs,phone:ph,tapTypes:tapTypes.join(','),wods:wods.join(','),tapOwed:h?h.tapOwed:0,wodOwed:h?h.wodOwed:0,status:h?h.status:'Due'};
+  const r=await push('Households','update',updates,id);
+  toast(r&&r.ok?'Household updated ✓':'Error: '+(r&&r.error||'unknown'));
+}
 
 init();
 </script>
